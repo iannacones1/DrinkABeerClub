@@ -28,7 +28,7 @@ output.write("<caption>Last Updated: #{Time.now}</caption>\n<tr>\n")
 output.write("  <th></th>\n")
 
 userCount = 0
-CSV.foreach("data/AllUsers.csv") do |user|
+CSV.foreach("data/Users.csv") do |user|
   output.write("  <th>#{user[0]}</th>\n")
   userCount = userCount + 1
 end
@@ -42,7 +42,7 @@ yearEnd = Date.parse("1st Jan 2015")
 
 u = 0
 
-CSV.foreach("data/AllUsers.csv") do |user|
+CSV.foreach("data/Users.csv") do |user|
 
     puts "Loading user #{user[0]}"
 
@@ -78,7 +78,7 @@ end
 output.write("<tr>\n  <th>Total:</th>\n")
 
 u = 0
-CSV.foreach("data/AllUsers.csv") do |user|
+CSV.foreach("data/Users.csv") do |user|
   t = 0
   CSV.foreach("data/States.csv") do |state|
     s = getStateIndex(state[0])
@@ -100,7 +100,7 @@ CSV.foreach("data/States.csv") do |state|
 
   u = 0
 
-  CSV.foreach("data/AllUsers.csv") do |user|
+  CSV.foreach("data/Users.csv") do |user|
 
     title = ""
     str = ""
