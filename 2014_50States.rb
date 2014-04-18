@@ -6,9 +6,13 @@ require '/home/pi/git/DrinkABeerClub/tokens/untappdConfigure.rb'
 
 DEFAULT_PNG = "https://d1c8v1qci5en44.cloudfront.net/site/assets/images/temp/badge-beer-default.png"
 
+USER_CONFIG = "data/Users.csv"
+STATE_CONFIG = "data/States.csv"
+
+
 def getStateIndex(inState)
   index = 0
-  CSV.foreach("data/States.csv") do |row|
+  CSV.foreach(STATE_CONFIG) do |row|
       if row[0] == inState then
         return index
       end
@@ -28,7 +32,7 @@ output.write("<caption>Last Updated: #{Time.now}</caption>\n<tr>\n")
 output.write("  <th></th>\n")
 
 userCount = 0
-CSV.foreach("data/Users.csv") do |user|
+CSV.foreach(USER_CONFIG) do |user|
   output.write("  <th>#{user[0]}</th>\n")
   userCount = userCount + 1
 end
@@ -42,15 +46,15 @@ yearEnd = Date.parse("1st Jan 2015")
 
 u = 0
 
-CSV.foreach("data/Users.csv") do |user|
+CSV.foreach(USER_CONFIG) do |user|
 
     puts "Loading user #{user[0]}"
-
-    userFeed = Array.new
 
     $lastId = 0
 
     feed = oauth.user_feed(username: user[0], max_id: $lastId, limit:50)
+    
+    puts oauth.rate_limit.inspect
 
     while Date.parse(feed.body.response.checkins.items.first.created_at) > yearStart do
 
@@ -60,7 +64,7 @@ CSV.foreach("data/Users.csv") do |user|
               s = getStateIndex(f.brewery.location.brewery_state)
               if s != -1 then
 
-                if x[u][s].nil? or x[u][s].rating_score < f.rating_score then
+                if x[u][s].nil? or x[u][s].rating_score <= f.rating_score then
                     x[u][s] = f
                 end
 
@@ -71,6 +75,9 @@ CSV.foreach("data/Users.csv") do |user|
         $lastId = feed.body.response.checkins.items.last.checkin_id
 
         feed = oauth.user_feed(username: user[0], max_id: $lastId, limit:50)
+
+        puts oauth.rate_limit.inspect
+
     end
     u = u + 1
 end
@@ -78,9 +85,9 @@ end
 output.write("<tr>\n  <th>Total:</th>\n")
 
 u = 0
-CSV.foreach("data/Users.csv") do |user|
+CSV.foreach(USER_CONFIG) do |user|
   t = 0
-  CSV.foreach("data/States.csv") do |state|
+  CSV.foreach(STATE_CONFIG) do |state|
     s = getStateIndex(state[0])
     if !x[u][s].nil? then
       t = t + 1
@@ -92,7 +99,7 @@ end
 
 output.write("  </tr>\n")
 
-CSV.foreach("data/States.csv") do |state|
+CSV.foreach(STATE_CONFIG) do |state|
 
   output.write("<tr>\n  <th>#{state[1]}</th>\n")
 
@@ -100,7 +107,7 @@ CSV.foreach("data/States.csv") do |state|
 
   u = 0
 
-  CSV.foreach("data/Users.csv") do |user|
+  CSV.foreach(USER_CONFIG) do |user|
 
     title = ""
     str = ""
