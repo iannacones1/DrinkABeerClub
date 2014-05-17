@@ -61,7 +61,7 @@ CSV.foreach(USER_CONFIG) do |user|
         feed.body.response.checkins.items.each do |f|
 
             if DateTime.parse(f.created_at) >= yearStart && DateTime.parse(f.created_at) < yearEnd
-              s = getStateIndex(f.brewery.location.brewery_state)
+              s = getStateIndex(f.brewery.location.brewery_state.strip)
               if s != -1 then
 
                 if x[u][s].nil? or x[u][s].rating_score <= f.rating_score then
