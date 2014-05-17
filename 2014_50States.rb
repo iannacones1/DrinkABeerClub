@@ -28,7 +28,7 @@ output = open("table.html", "w")
 output.write("<html>\n<head>\n<style>\n")
 output.write("table,th,td\n{border:1px solid black;\nborder-collapse:collapse;}\nth,td\n{padding:5px;}")
 output.write("\n</style>\n</head><body>\n<table>\n")
-output.write("<caption>Last Updated: #{Time.now}</caption>\n<tr>\n")
+output.write("<caption>Last Updated: #{Time.now.asctime}</caption>\n<tr>\n")
 output.write("  <th></th>\n")
 
 userCount = 0
@@ -41,8 +41,10 @@ output.write("  </tr>\n")
 
 x = Array.new(userCount) { Array.new(50) }
 
-yearStart = Date.parse("31st Dec 2013")
-yearEnd = Date.parse("1st Jan 2015")
+# Jan 1 2014 +5 to GMT
+yearStart = DateTime.new(2014,1,1,5,0,0)
+# Jan 1 2015 +5 to GMT
+yearEnd = DateTime.new(2015,1,1,5,0,0)
 
 u = 0
 
@@ -54,13 +56,11 @@ CSV.foreach(USER_CONFIG) do |user|
 
     feed = oauth.user_feed(username: user[0], max_id: $lastId, limit:50)
     
-    puts oauth.rate_limit.inspect
-
-    while Date.parse(feed.body.response.checkins.items.first.created_at) > yearStart do
+    while DateTime.parse(feed.body.response.checkins.items.first.created_at) >= yearStart do
 
         feed.body.response.checkins.items.each do |f|
 
-            if Date.parse(f.created_at) > yearStart && Date.parse(f.created_at) < yearEnd
+            if DateTime.parse(f.created_at) >= yearStart && DateTime.parse(f.created_at) < yearEnd
               s = getStateIndex(f.brewery.location.brewery_state)
               if s != -1 then
 
@@ -133,6 +133,8 @@ CSV.foreach(STATE_CONFIG) do |state|
   output.write("  </tr>\n")
 
 end
+
+puts oauth.rate_limit.inspect
 
 output.write("</table>\n</body>\n</html>")
 
