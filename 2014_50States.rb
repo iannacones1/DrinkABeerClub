@@ -33,7 +33,7 @@ output.write("  <th></th>\n")
 
 userCount = 0
 CSV.foreach(USER_CONFIG) do |user|
-  output.write("  <th>#{user[0]}</th>\n")
+  output.write("  <th><a href=\"http://www.DrinkABeerClub.com/#{user[0]}\">#{user[0]}</a></th>\n")
   userCount = userCount + 1
 end
 
@@ -50,7 +50,7 @@ u = 0
 
 CSV.foreach(USER_CONFIG) do |user|
 
-    puts "Loading user #{user[0]}"
+    puts "Building 50 States for user: #{user[0]}"
 
     $lastId = 0
 

@@ -47,7 +47,7 @@ CSV.foreach(USER_CONFIG) do |user|
     distinctBeers.each do |year, checkinArray|
         puts "#{year} Total: #{checkinArray.size}"
         checkinArray.each do |checkin|
-            puts "    #{checkin.beer.beer_name}$#{checkin.brewery.brewery_name}"
+            puts "\"#{checkin.beer.beer_name}\",\"#{checkin.brewery.brewery_name}\",\"#{checkin.beer.auth_rating}\""
         end
     end
 
