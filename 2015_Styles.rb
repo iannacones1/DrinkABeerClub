@@ -39,7 +39,7 @@ end
 
 output.write("  </tr>\n")
 
-x = Array.new(userCount) { Array.new(50) }
+x = Array.new(userCount) { Array.new(54) }
 
 # Jan 1 2014 +5 to GMT
 yearStart = DateTime.new(2014,1,1,5,0,0)
@@ -63,7 +63,7 @@ CSV.foreach(USER_CONFIG) do |user|
             if DateTime.parse(f.created_at) >= yearStart && DateTime.parse(f.created_at) < yearEnd
               s = getStyleIndex(f.beer.beer_style)
 
-              puts "Style: #{f.beer.beer_style} index: #{s}"
+#              puts "Style: #{f.beer.beer_style} index: #{s}"
 
               if s != -1 then
 
@@ -104,36 +104,41 @@ output.write("  </tr>\n")
 
 CSV.foreach(STYLE_CONFIG) do |style|
 
-  output.write("<tr>\n  <th>#{style[0]}</th>\n")
+  if style.size() == 2 then
+    output.write("  <tr>\n    <th>#{style[0]}<br/>\n      <img src=\"#{style[1]}\">\n    </th>\n  </tr>\n")
+  else
+    output.write("<tr>\n  <th><a href=\"https://untappd.com/beer/top_rated?type_id=#{style[1]}\">#{style[2]}</a></th>\n")
 
-  s = getStyleIndex(style[0])
+    s = getStyleIndex(style[0])
 
-  u = 0
+    u = 0
 
-  CSV.foreach(USER_CONFIG) do |user|
+    CSV.foreach(USER_CONFIG) do |user|
 
-    title = ""
-    str = ""
+      title = ""
+      str = ""
 
-    if !x[u][s].nil? then
+      if !x[u][s].nil? then
 
-      title = "#{x[u][s].created_at}\n#{x[u][s].beer.beer_name}\n#{x[u][s].brewery.brewery_name}"
+        title = "#{x[u][s].created_at}\n#{x[u][s].beer.beer_name}\n#{x[u][s].brewery.brewery_name}"
     
-      if "#{x[u][s].beer.beer_label}" != DEFAULT_PNG then
-        str = "<img src=\"#{x[u][s].beer.beer_label}\">"
-      else
-        str = "#{x[u][s].beer.beer_name}<br>#{x[u][s].brewery.brewery_name}"
+        if "#{x[u][s].beer.beer_label}" != DEFAULT_PNG then
+          str = "<img src=\"#{x[u][s].beer.beer_label}\">"
+        else
+          str = "#{x[u][s].beer.beer_name}<br>#{x[u][s].brewery.brewery_name}"
+        end
+
       end
+
+      output.write("  <td align=\"center\" title=\"#{title}\">#{str}</td>\n")
+
+      u = u + 1
 
     end
 
-    output.write("  <td align=\"center\" title=\"#{title}\">#{str}</td>\n")
-
-    u = u + 1
+    output.write("  </tr>\n")
 
   end
-
-  output.write("  </tr>\n")
 
 end
 

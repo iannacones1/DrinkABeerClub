@@ -1,50 +1,54 @@
-Altbier
-Berliner Weisse
-Bock
-Czech Pilsener
-Euro Dark Lager
-Eisbock
-German Pilsner
-Helles Lager
-Kristallweizen 
-Maibock/Helles Bock
-Rauchbier
-Weizenbock
-Baltic Porter
-Braggot
-English Brown Ale
-English IPA
-Irish Red Ale
-Irish Dry Stout
-English Mild Ale
-Milk / Sweet Stout
-Oatmeal Stout
-Oyster Stout
-Russian Imperial Stout
-Scotch Ale / Wee Heavy
-Winter Warmer
-Belgian Dubbel
-Belgian IPA
-Bière de Champagne / Bière Brut
-Bière de Garde
-Faro
-Gueuze
-Flanders Oud Bruin
-Saison / Farmhouse Ale
-Belgian Tripel
-Witbier
-American Pale Ale
-American Pale Wheat Ale
-American Barleywine
-Black IPA / Cascadian Dark Ale
-Cream Ale
-Imperial / Double IPA
-Belgian Strong Pale Ale
-American IPA
-Malt Liquor 
-American Amber / Red Lager
-American Porter
-Pumpkin / Yam Beer
-Rye Beer
-Wheat Wine
-American Wild Ale
+The German,http://upload.wikimedia.org/wikipedia/en/thumb/b/ba/Flag_of_Germany.svg/125px-Flag_of_Germany.svg.png
+Altbier,95,Altbier
+Berliner Weisse,171,Berliner Weisse
+Bock,14,Bock
+Czech Pilsener,207,Bohemian Pilsner
+Euro Dark Lager,239,Dark Lager
+Eisbock,193,Eisbock
+German Pilsner,104,German Pils
+Helles Lager,25,Helles
+Kristallweizen,31,Kristalweizen
+Maibock/Helles Bock,120,Maibock
+Rauchbier,224,Rauchbier
+Weizenbock,51,Weizenbock
+The British Isles,http://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Flag_of_the_United_Kingdom.svg/125px-Flag_of_the_United_Kingdom.svg.png
+Baltic Porter,6,Baltic Porter
+Braggot,188,Braggot
+English Brown Ale,196,Brown Ale
+English IPA,158,Indian Pale Ale (English)
+Irish Red Ale,29,Irish Red Ale
+Irish Dry Stout,152,Irish Stout
+English Mild Ale,118,Mild Ale
+Milk / Sweet Stout,231,Milk / Sweet Stout
+Oatmeal Stout,34,Oatmeal Stout
+Oyster Stout,173,Oyster Stout
+Russian Imperial Stout,41,Russian Imperial Stout
+Scotch Ale / Wee Heavy,218,Scotch Ale
+Winter Warmer,130,Winter Warmer
+The Belgians,http://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_Belgium.svg/125px-Flag_of_Belgium.svg.png
+Belgian Dubbel,63,Abbey Dubbel
+Belgian IPA,61,Belgian IPA
+Bière de Champagne / Bière Brut,206,Biere de Champagne
+Bière de Garde,195,Biere de Garde
+Faro,226,Fargo
+Gueuze,221,Gueuze
+Flanders Oud Bruin,228,Oud Bruin
+Saison / Farmhouse Ale,42,Saison
+Belgian Tripel,124,Tripel
+Witbier,83,Witbier
+The Americans,http://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/125px-Flag_of_the_United_States.svg.png
+American Pale Ale,99,American Pale Ale
+American Pale Wheat Ale,5,American Pale Wheat
+American Barleywine,7,Barleywine
+Black IPA / Cascadian Dark Ale,115,Cascadian Dark Ale
+Cream Ale,79,Cream Ale
+Imperial / Double IPA,227,Double IPA
+Belgian Strong Pale Ale,132,Double Witbier
+American IPA,128,Indian Pale Ale (American)
+Malt Liquor,107,Malt Liquor
+American Amber / Red Lager,240,Pre-Prohibition Lager
+American Porter,131,Porter
+Pumpkin / Yam Beer,201,Pumpkin Beer
+Rye Beer,68,Rye Beer
+Wheat Wine,87,Wheat Wine
+American Wild Ale,71,Wild Ale
