@@ -7,13 +7,13 @@ require '/home/pi/git/DrinkABeerClub/tokens/untappdConfigure.rb'
 DEFAULT_PNG = "https://d1c8v1qci5en44.cloudfront.net/site/assets/images/temp/badge-beer-default.png"
 
 USER_CONFIG = "data/Users.csv"
-STYLE_CONFIG = "data/styles.csv"
+SET_CONFIG = "data/styles.csv"
+SET_COUNT = `wc #{SET_CONFIG} -l | cut -d \' \' -f 1`
 
-
-def getStyleIndex(inStyle)
+def getSetIndex(inSet)
   index = 0
-  CSV.foreach(STYLE_CONFIG) do |row|
-      if row[0] == inStyle then
+  CSV.foreach(SET_CONFIG) do |row|
+      if row[0] == inSet then
         return index
       end
       index = index + 1 
@@ -39,7 +39,7 @@ end
 
 output.write("  </tr>\n")
 
-x = Array.new(userCount) { Array.new(54) }
+x = Array.new(userCount) { Array.new(SET_COUNT.to_i) }
 
 # Jan 1 2014 +5 to GMT
 yearStart = DateTime.new(2014,1,1,5,0,0)
@@ -55,22 +55,17 @@ CSV.foreach(USER_CONFIG) do |user|
     $lastId = 0
 
     feed = oauth.user_feed(username: user[0], max_id: $lastId, limit:50)
-    
-    while feed.body.response.checkins.items.count > 0 && DateTime.parse(feed.body.response.checkins.items.first.created_at) >= yearStart do
+
+    while feed.body.response.checkins.items.size > 0 && DateTime.parse(feed.body.response.checkins.items.first.created_at) >= yearStart do
 
         feed.body.response.checkins.items.each do |f|
 
             if DateTime.parse(f.created_at) >= yearStart && DateTime.parse(f.created_at) < yearEnd
-              s = getStyleIndex(f.beer.beer_style)
-
-#              puts "Style: #{f.beer.beer_style} index: #{s}"
-
-              if s != -1 then
-
-                if x[u][s].nil? or x[u][s].rating_score <= f.rating_score then
-                    x[u][s] = f
-                end
-
+                s = getSetIndex(f.beer.beer_style)
+                if s != -1 then
+                    if x[u][s].nil? or x[u][s].rating_score <= f.rating_score then
+                        x[u][s] = f
+                    end
               end         
             end
         end
@@ -90,8 +85,8 @@ output.write("<tr>\n  <th>Total:</th>\n")
 u = 0
 CSV.foreach(USER_CONFIG) do |user|
   t = 0
-  CSV.foreach(STYLE_CONFIG) do |state|
-    s = getStyleIndex(state[0])
+  CSV.foreach(SET_CONFIG) do |state|
+    s = getSetIndex(state[0])
     if !x[u][s].nil? then
       t = t + 1
     end
@@ -102,14 +97,14 @@ end
 
 output.write("  </tr>\n")
 
-CSV.foreach(STYLE_CONFIG) do |style|
+CSV.foreach(SET_CONFIG) do |set|
 
-  if style.size() == 2 then
-    output.write("  <tr>\n    <th>#{style[0]}<br/>\n      <img src=\"#{style[1]}\">\n    </th>\n  </tr>\n")
+  if set.size() == 2 then
+    output.write("  <tr>\n    <th>#{set[0]}<br/>\n      <img src=\"#{set[1]}\">\n    </th>\n  </tr>\n")
   else
-    output.write("<tr>\n  <th><a href=\"https://untappd.com/beer/top_rated?type_id=#{style[1]}\">#{style[2]}</a></th>\n")
+    output.write("<tr>\n  <th><a href=\"https://untappd.com/beer/top_rated?type_id=#{set[1]}\">#{set[2]}</a></th>\n")
 
-    s = getStyleIndex(style[0])
+    s = getSetIndex(set[0])
 
     u = 0
 

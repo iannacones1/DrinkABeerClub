@@ -7,13 +7,13 @@ require '/home/pi/git/DrinkABeerClub/tokens/untappdConfigure.rb'
 DEFAULT_PNG = "https://d1c8v1qci5en44.cloudfront.net/site/assets/images/temp/badge-beer-default.png"
 
 USER_CONFIG = "data/Users.csv"
-STATE_CONFIG = "data/States.csv"
+SET_CONFIG = "data/States.csv"
+SET_COUNT = `wc #{SET_CONFIG} -l | cut -d \' \' -f 1`
 
-
-def getStateIndex(inState)
+def getSetIndex(inSet)
   index = 0
-  CSV.foreach(STATE_CONFIG) do |row|
-      if row[0] == inState then
+  CSV.foreach(SET_CONFIG) do |row|
+      if row[0] == inSet then
         return index
       end
       index = index + 1 
@@ -39,7 +39,7 @@ end
 
 output.write("  </tr>\n")
 
-x = Array.new(userCount) { Array.new(50) }
+x = Array.new(userCount) { Array.new(SET_COUNT.to_i) }
 
 # Jan 1 2014 +5 to GMT
 yearStart = DateTime.new(2014,1,1,5,0,0)
@@ -55,19 +55,17 @@ CSV.foreach(USER_CONFIG) do |user|
     $lastId = 0
 
     feed = oauth.user_feed(username: user[0], max_id: $lastId, limit:50)
-    
-    while DateTime.parse(feed.body.response.checkins.items.first.created_at) >= yearStart do
+
+    while feed.body.response.checkins.items.size > 0 && DateTime.parse(feed.body.response.checkins.items.first.created_at) >= yearStart do
 
         feed.body.response.checkins.items.each do |f|
 
             if DateTime.parse(f.created_at) >= yearStart && DateTime.parse(f.created_at) < yearEnd
-              s = getStateIndex(f.brewery.location.brewery_state.strip)
-              if s != -1 then
-
-                if x[u][s].nil? or x[u][s].rating_score <= f.rating_score then
-                    x[u][s] = f
-                end
-
+             s = getSetIndex(f.brewery.location.brewery_state.strip)
+                if s != -1 then
+                    if x[u][s].nil? or x[u][s].rating_score <= f.rating_score then
+                        x[u][s] = f
+                    end
               end         
             end
         end
@@ -87,8 +85,8 @@ output.write("<tr>\n  <th>Total:</th>\n")
 u = 0
 CSV.foreach(USER_CONFIG) do |user|
   t = 0
-  CSV.foreach(STATE_CONFIG) do |state|
-    s = getStateIndex(state[0])
+  CSV.foreach(SET_CONFIG) do |state|
+    s = getSetIndex(state[0])
     if !x[u][s].nil? then
       t = t + 1
     end
@@ -99,11 +97,11 @@ end
 
 output.write("  </tr>\n")
 
-CSV.foreach(STATE_CONFIG) do |state|
+CSV.foreach(SET_CONFIG) do |set|
 
-  output.write("<tr>\n  <th>#{state[1]}</th>\n")
+  output.write("<tr>\n  <th>#{set[1]}</th>\n")
 
-  s = getStateIndex(state[0])
+  s = getSetIndex(set[0])
 
   u = 0
 
