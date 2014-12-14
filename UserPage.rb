@@ -26,7 +26,8 @@ CSV.foreach(USER_CONFIG) do |user|
     end 
 
     output = open("#{user[0]}.html", "w")
-    output.write("<html>\n\t<head>\n\t<font size=\"6\" face=\"Verdana\">#{user[0]}</font><br>\n</head>\n\t<body>\n")
+    userCor = open("#{user[0]}.cor", "w")
+    output.write("<html>\n\t<head>\n\t\t<font size=\"6\" face=\"Verdana\">#{user[0]}</font><br>\n\t</head>\n\t<body>\n")
 
     userRating = Hash.new(0)
     breweryCount = Hash.new(0)
@@ -54,7 +55,8 @@ CSV.foreach(USER_CONFIG) do |user|
 
             distinctBeers[t.year].push(c)
 
-#            userRating[c.brewery.brewery_name] += c.beer.auth_rating
+            userCor.write("#{c.brewery.location.lng} #{c.brewery.location.lat}\n\n")
+
             if c.beer.auth_rating == 0 then
                 puts "No user rating for: #{c.brewery.brewery_name}'s #{c.beer.beer_name} using rating_score: #{c.beer.rating_score}"
             end
@@ -86,8 +88,8 @@ CSV.foreach(USER_CONFIG) do |user|
 
     end
 
-    output.write("</font></pr>\n")
-    output.write("<pr><font face=\"Verdana\">Favorite Breweries</font><br>\n")
+    output.write("\t\t</font></pr>\n")
+    output.write("\t\t<pr><font face=\"Verdana\">Favorite Breweries</font><br>\n")
 
     $i = 0
     $lastRating = 0
@@ -97,19 +99,22 @@ CSV.foreach(USER_CONFIG) do |user|
             break
         end
         puts "#{brewery}, #{breweryCount[brewery]}, #{rating}\n"
-        output.write("\t\t<img src=\"#{breweryInfo[brewery].brewery_label}\" title=\"#{brewery} - #{breweryCount[brewery]} / #{rating}\">\n")
+        output.write("\t\t\t<img src=\"#{breweryInfo[brewery].brewery_label}\" title=\"#{brewery} - #{breweryCount[brewery]} / #{rating}\">\n")
         $i = $i + 1
         $lastRating = rating
         if $i % 5 == 0
-            output.write("\t\t<br>\n")
+            output.write("\t\t\t<br>\n")
         end
     end
 
-    output.write("</pr>\n")
+    output.write("\t\t</pr>\n")
+
+    output.write("\t\t<img src=\"#{user[0]}.png\"><br>\n")
 
     output.write("\n\nLast Updated: #{Time.now.asctime}")
     output.write("\t</body>\n<html>")
     output.close
+    userCor.close
 
     $u = $u + 1
 
