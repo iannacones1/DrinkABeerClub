@@ -10,8 +10,10 @@ do
 
     USER=${FILE%.cor}
 
-    echo "Building plot for user: $USER"
+    echo "Building WORLD for user: $USER"
 
     gnuplot -e "user='$USER'" mapMaker.gnu
+    echo "Building USA for user: $USER"
+    gnuplot -e "user='$USER'" states.gnu
 
 done

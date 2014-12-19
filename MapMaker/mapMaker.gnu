@@ -1,6 +1,6 @@
+#!/usr/bin/gnuplot
 
 if (!exists("user")) user='test'
-
 
 corFile=user . '.cor'
 outputFile=user . '.png'

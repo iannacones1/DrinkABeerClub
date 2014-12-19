@@ -55,7 +55,11 @@ CSV.foreach(USER_CONFIG) do |user|
 
             distinctBeers[t.year].push(c)
 
-            userCor.write("#{c.brewery.location.lng} #{c.brewery.location.lat}\n\n")
+            if c.brewery.location.lng != 0 || c.brewery.location.lat != 0
+                userCor.write("#{c.brewery.location.lng} #{c.brewery.location.lat}\n\n")
+            else
+                puts "#{c.brewery.brewery_name} has no location!!!"
+            end
 
             if c.beer.auth_rating == 0 then
                 puts "No user rating for: #{c.brewery.brewery_name}'s #{c.beer.beer_name} using rating_score: #{c.beer.rating_score}"
@@ -109,6 +113,7 @@ CSV.foreach(USER_CONFIG) do |user|
 
     output.write("\t\t</pr>\n")
 
+    output.write("\t\t<img src=\"#{user[0]}_usa.png\"><br>\n")
     output.write("\t\t<img src=\"#{user[0]}.png\"><br>\n")
 
     output.write("\n\nLast Updated: #{Time.now.asctime}")
