@@ -23,7 +23,7 @@ end
 
 oauth = NRB::Untappd::API.new access_token: getToken
 
-output = open("beta.html", "w")
+output = open("table.html", "w")
 
 output.write("<html>\n<head>\n<style>\n")
 output.write("table,th,td\n{border:1px solid black;\nborder-collapse:collapse;}\nth,td\n{padding:5px;}")
@@ -41,10 +41,10 @@ output.write("  </tr>\n")
 
 x = Array.new(userCount) { Array.new(SET_COUNT.to_i) }
 
-# Jan 1 2014 +5 to GMT
-yearStart = DateTime.new(2014,1,1,5,0,0)
 # Jan 1 2015 +5 to GMT
-yearEnd = DateTime.new(2015,1,1,5,0,0)
+yearStart = DateTime.new(2015,1,1,5,0,0)
+# Jan 1 2016 +5 to GMT
+yearEnd = DateTime.new(2016,1,1,5,0,0)
 
 u = 0
 
@@ -59,9 +59,8 @@ CSV.foreach(USER_CONFIG) do |user|
     while feed.body.response.checkins.items.size > 0 && DateTime.parse(feed.body.response.checkins.items.first.created_at) >= yearStart do
 
         feed.body.response.checkins.items.each do |f|
-
             if DateTime.parse(f.created_at) >= yearStart && DateTime.parse(f.created_at) < yearEnd
-                s = getSetIndex(f.beer.beer_style)
+                s = getSetIndex(f.beer.beer_style.strip)
                 if s != -1 then
                     if x[u][s].nil? or x[u][s].rating_score <= f.rating_score then
                         x[u][s] = f
@@ -91,7 +90,7 @@ CSV.foreach(USER_CONFIG) do |user|
       t = t + 1
     end
   end
-  output.write("  <td align=\"center\">#{t}\\50</td>\n")
+  output.write("  <td align=\"center\">#{t}\\51</td>\n")
   u = u + 1
 end
 

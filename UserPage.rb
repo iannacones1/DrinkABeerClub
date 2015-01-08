@@ -25,9 +25,7 @@ CSV.foreach(USER_CONFIG) do |user|
         next
     end 
 
-    output = open("#{user[0]}.html", "w")
     userCor = open("#{user[0]}.cor", "w")
-    output.write("<html>\n\t<head>\n\t\t<font size=\"6\" face=\"Verdana\">#{user[0]}</font><br>\n\t</head>\n\t<body>\n")
 
     userRating = Hash.new(0)
     breweryCount = Hash.new(0)
@@ -38,7 +36,7 @@ CSV.foreach(USER_CONFIG) do |user|
 
     $index = 0
 
-    feed = oauth.user_distinct_beers(username: user[0], offset: $index)
+    feed = oauth.user_distinct_beers(username: user[0], offset: $index, limit:50)
     
     while feed.body.response.beers.items.count > 0 do
 
@@ -61,10 +59,10 @@ CSV.foreach(USER_CONFIG) do |user|
                 puts "#{c.brewery.brewery_name} has no location!!!"
             end
 
-            if c.beer.auth_rating == 0 then
+            if c.rating_score == 0 then
                 puts "No user rating for: #{c.brewery.brewery_name}'s #{c.beer.beer_name} using rating_score: #{c.beer.rating_score}"
             end
-            userRating[c.brewery.brewery_name] += (c.beer.auth_rating == 0 ? c.beer.rating_score : c.beer.auth_rating)
+            userRating[c.brewery.brewery_name] += (c.rating_score == 0 ? c.beer.rating_score : c.rating_score)
             breweryInfo[c.brewery.brewery_name] = c.brewery
             breweryCount[c.brewery.brewery_name] += 1
         end
@@ -72,11 +70,13 @@ CSV.foreach(USER_CONFIG) do |user|
         if feed.body.response.beers.items.count <  25
             feed.body.response.beers.items.clear
         else
-            feed = oauth.user_distinct_beers(username: user[0], offset: $index)
+            feed = oauth.user_distinct_beers(username: user[0], offset: $index, limit:50)
         end
 
    end
 
+    output = open("#{user[0]}.html", "w")
+    output.write("<html>\n\t<head>\n\t\t<font size=\"6\" face=\"Verdana\">#{user[0]}</font><br>\n\t</head>\n\t<body>\n")
     output.write("\t\t<pr><font face=\"Verdana\">Distinct Checkins by Year<br>\n")
 
     t = Time.new
@@ -111,7 +111,7 @@ CSV.foreach(USER_CONFIG) do |user|
         end
     end
 
-    output.write("\t\t</pr>\n")
+    output.write("\t\t</pr><br>\n")
 
     output.write("\t\t<img src=\"#{user[0]}_usa.png\"><br>\n")
     output.write("\t\t<img src=\"#{user[0]}.png\"><br>\n")
