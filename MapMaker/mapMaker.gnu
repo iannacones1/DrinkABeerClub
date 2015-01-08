@@ -4,23 +4,22 @@ if (!exists("user")) user='test'
 
 corFile=user . '.cor'
 outputFile=user . '.png'
-unset key
-unset border
-unset yzeroaxis
-unset xtics
-unset ytics
 
-plot 'world.dat' with lines lt 3 , corFile with points lt 1 pt 2
+reset
 
-#plot 'world.dat' with lines lt 3
-set title ""
-#set key on
-#set border
-
-#set yzeroaxis
-#set xtics
-#set ytics
-set term png
+# png
+set terminal pngcairo size 700,350 enhanced font 'Verdana,10'
 set output outputFile
 
-replot
+unset key
+set border 0
+unset tics
+unset colorbox
+set lmargin 0
+set rmargin 0
+set bmargin 0
+set tmargin 0
+
+set size ratio -1
+
+plot 'NE2_50M_SR_W_700px.txt' w rgbimage, corFile with points lt 1 pt 2
