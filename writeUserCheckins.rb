@@ -1,17 +1,19 @@
 #!/usr/bin/ruby
 require 'drink-socially'
+require 'date'
 require 'csv'
 require '/home/pi/git/DrinkABeerClub/tokens/untappdConfigure.rb'
-require '/home/pi/git/DrinkABeerClub/Classes/DistinctBeer.rb'
-
-DEFAULT_PNG = "https://d1c8v1qci5en44.cloudfront.net/site/assets/images/temp/badge-beer-default.png"
-
-USER_CONFIG = "data/TestUsers.csv"
+require '/home/pi/git/DrinkABeerClub/Classes/Checkin.rb'
 
 if ARGV[0].nil?
     puts "Please input username"
     exit 1
 end
+
+# Jan 1 2015 +5 to GMT
+yearStart = DateTime.new(2015,1,1,5,0,0)
+# Jan 1 2016 +5 to GMT
+yearEnd = DateTime.new(2016,1,1,5,0,0)
 
 oauth = NRB::Untappd::API.new access_token: getToken
 
@@ -19,8 +21,8 @@ $user = ARGV[0]
 
 puts "Loading User: #{$user}"
 
-$temp_file = "#{$user}_distinct_beers.csv"
-$user_file = "user_data/#{$user}_distinct_beers.csv"
+$temp_file = "#{$user}_checkins.csv"
+$user_file = "user_data/#{$user}_checkins.csv"
 
 puts "Updating File: #{$user_file}"
 
@@ -37,7 +39,7 @@ $last_bid
 
 CSV.foreach($user_file, converters: :numeric) do |row|
 
-    c = Distinct_beer.new(row)
+    c = Checkin.new(row)
 
     $last_bid = c.beer_bid
 
@@ -46,34 +48,30 @@ end
 
 puts "Last BID: #{$last_bid}"
 
-feed = oauth.user_distinct_beers(username: "#{$user}", offset: $index)
+feed = oauth.user_feed(username: "#{$user}", max_id: $index, limit:50)
 
 temp = CSV.open($temp_file, 'w')
 
 $additions = 0
 
-while feed.body.response.beers.items.count > 0 do
+while feed.body.response.checkins.items.count > 0 && DateTime.parse(feed.body.response.checkins.items.first.created_at) >= yearStart do
 
-    $index = $index + feed.body.response.beers.items.count
+    puts "#{DateTime.parse(feed.body.response.checkins.items.first.created_at).asctime}"
 
-    feed.body.response.beers.items.each do |c|
+    $index = feed.body.response.checkins.items.last.checkin_id
+
+    feed.body.response.checkins.items.each do |c|
 
         if c.beer.bid != $last_bid
             $additions = $additions + 1
             temp.add_row([c.beer.bid,
-                          c.first_checkin_id,
-                          c.first_created_at,
-                          c.recent_checkin_id,
-                          c.recent_created_at,
+                          c.checkin_id,
+                          c.created_at,
                           c.rating_score,
-                          c.first_had,
-                          c.count,
                           c.beer.beer_name,
                           c.beer.beer_label,
                           c.beer.beer_abv,
                           c.beer.beer_style,
-                          c.beer.rating_score,
-                          c.beer.rating_count,
                           c.brewery.brewery_id,
                           c.brewery.brewery_name,
                           c.brewery.brewery_label,
@@ -81,7 +79,8 @@ while feed.body.response.beers.items.count > 0 do
                           c.brewery.location.brewery_city,
                           c.brewery.location.brewery_state,
                           c.brewery.location.lat,
-                          c.brewery.location.lng])
+                          c.brewery.location.lng,
+                          c.user.user_name])
         else
             $shouldStop = true
             break
@@ -96,10 +95,10 @@ while feed.body.response.beers.items.count > 0 do
         break
     end
 
-    if feed.body.response.beers.items.count < 25
-        feed.body.response.beers.items.clear
+    if feed.body.response.checkins.items.count < 50
+        feed.body.response.checkins.items.clear
     else
-      feed = oauth.user_distinct_beers(username: "#{$user}", offset: $index)
+      feed = oauth.user_feed(username: "#{$user}", max_id: $index, limit:50)
       puts oauth.rate_limit.inspect
     end
 

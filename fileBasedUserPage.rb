@@ -13,7 +13,7 @@ $user = ARGV[0]
 
 $user_file = "user_data/#{$user}_distinct_beers.csv"
 
-puts "Reading File: #{$user_file}"
+puts "Building user page for #{$user} from file: #{$user_file}"
 
 userCor = open("#{$user}.cor", "w")
 
@@ -38,11 +38,11 @@ CSV.foreach($user_file, converters: :numeric) do |row|
     if c.brewery_lng != 0 || c.brewery_lat != 0
         userCor.write("#{c.brewery_lng} #{c.brewery_lat}\n\n")
     else
-        puts "#{c.brewery_name} has no location!!!"
+        #puts "#{c.brewery_name} has no location!!!"
     end
 
     if c.rating_score == 0 then
-        puts "No user rating for: #{c.brewery_name}'s #{c.beer_name} using rating_score: #{c.beer_rating_score}"
+        #puts "No user rating for: #{c.brewery_name}'s #{c.beer_name} using rating_score: #{c.beer_rating_score}"
     end
     
     userRating[c.brewery_name] += (c.rating_score == 0 ? c.beer_rating_score : c.rating_score)
@@ -75,13 +75,15 @@ output.write("\t\t<pr><font face=\"Verdana\">Favorite Breweries</font><br>\n")
 $i = 0
 $lastRating = 0
 
+    #puts "brewery, breweryCount, rating"
+
 userRating.sort_by { |brewery, rating| rating }.reverse.each do |brewery, rating|
 
     if $i >= 10 && $lastRating > rating
         break
     end
 
-    puts "#{brewery}, #{breweryCount[brewery]}, #{rating}\n"
+    #puts "#{brewery}, #{breweryCount[brewery]}, #{rating}"
 
     output.write("\t\t\t<img src=\"#{breweryInfo[brewery].brewery_label}\" title=\"#{brewery} - #{breweryCount[brewery]} / #{rating}\">\n")
     $i = $i + 1
