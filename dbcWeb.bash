@@ -1,7 +1,8 @@
 #!/bin/bash
-
-hour=$(date +%H)
+echo $(date)
 minute=$(date +%M)
+hour=$(date +%H)
+hour=${hour#0}
 
 cd /home/pi/git/DrinkABeerClub
 
@@ -9,9 +10,11 @@ USERS="data/Users.csv"
 
 USER_COUNT=$(cat $USERS | wc -l)
 
-if [ $hour -le $USER_COUNT ] ; then
+echo "dbcWeb.bash running hour=$hour minute=$minute"
+
+if [[ $hour -ne 0 ]] && [[ $hour -le $USER_COUNT ]]; then
   
-    if [ $minute -ne 0 ] || [ $minute -ne 30]; then
+    if [[ $minute -ne 0 ]] && [[ $minute -ne 30 ]]; then
         echo "Exiting hour=$hour minute=$minute"
         exit 1
     fi
@@ -45,7 +48,7 @@ while read LINE; do
     # which will force the whole file to be rebuild
     # this is mostly because data on a beer can change over
     # time (e.g. Beer Label, Avg Rating)  
-    if [ $index -eq $hour ] && [ $minute -eq 0 ]; then
+    if [[ $index -eq $hour ]] && [[ $minute -eq 0 ]]; then
        echo "Removing user_data for:" $USER
        rm "user_data/"$USER"_checkins.csv"
        rm "user_data/"$USER"_distinct_beers.csv"
@@ -98,3 +101,5 @@ done < $USERS
 cd /home/pi/git/DrinkABeerClub
 
 ./fileBased_2015.rb && mv table.html /var/www/table.html
+
+echo $(date)

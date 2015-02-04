@@ -79,14 +79,14 @@ $lastRating = 0
 
 userRating.sort_by { |brewery, rating| rating }.reverse.each do |brewery, rating|
 
-    if $i >= 10 && $lastRating > rating
+    if $i >= 20 && $lastRating > rating
         break
     end
 
     #puts "#{brewery}, #{breweryCount[brewery]}, #{rating}"
 
     output.write("\t\t\t<img src=\"#{breweryInfo[brewery].brewery_label}\" title=\"#{brewery} - #{breweryCount[brewery]} / #{rating}\">\n")
-    $i = $i + 1
+    $i += 1
     $lastRating = rating
     if $i % 5 == 0
         output.write("\t\t\t<br>\n")

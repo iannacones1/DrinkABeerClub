@@ -4,6 +4,7 @@ require 'date'
 require 'csv'
 require '/home/pi/git/DrinkABeerClub/tokens/untappdConfigure.rb'
 require '/home/pi/git/DrinkABeerClub/Classes/Checkin.rb'
+require '/home/pi/git/DrinkABeerClub/Classes/DistinctBeer.rb'
 
 if ARGV[0].nil?
     puts "Please input username"
@@ -23,6 +24,7 @@ puts "Loading User: #{$user}"
 
 $temp_file = "#{$user}_checkins.csv"
 $user_file = "user_data/#{$user}_checkins.csv"
+$distinct_file = "user_data/#{$user}_distinct_beers.csv"
 
 puts "Updating File: #{$user_file}"
 
@@ -63,7 +65,9 @@ while feed.body.response.checkins.items.count > 0 && DateTime.parse(feed.body.re
     feed.body.response.checkins.items.each do |c|
 
         if c.beer.bid != $last_bid
+
             $additions = $additions + 1
+
             temp.add_row([c.beer.bid,
                           c.checkin_id,
                           c.created_at,
