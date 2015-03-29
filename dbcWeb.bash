@@ -100,6 +100,24 @@ done < $USERS
 #2015
 cd /home/pi/git/DrinkABeerClub
 
-./fileBased_2015.rb && mv table.html /var/www/table.html
+./fileBased_2015.rb
+
+if [[ $? -eq 0 ]]; then
+
+    mv table.html /var/www/table.html
+
+    rm -rf user_data.bk
+    cp -r user_data user_data.bk 
+
+else
+
+    rm table.html
+
+    rm -rf user_data
+    cp -r user_data.bk user_data 
+    echo $(data) >> failover.log
+fi
+
+
 
 echo $(date)

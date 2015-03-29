@@ -130,11 +130,12 @@ CSV.foreach(SET_CONFIG) do |set|
           title = ""
           str = ""
           if !x[u][s].nil? then
-            title = "#{x[u][s].created_at}\n#{x[u][s].beer_name}\n#{x[u][s].brewery_name}\n#{x[u][s].beer_rating_score}"
+            #            title = "#{x[u][s].beer_name}\n#{x[u][s].brewery_name}\n(#{x[u][s].beer_rating_score.round(3)})"
+            title = "(#{x[u][s].beer_rating_score.round(3)})\n#{x[u][s].beer_name}\n#{x[u][s].brewery_name}\n(#{x[u][s].beer_rating_score.round(3)})"
             if "#{x[u][s].beer_label}" != DEFAULT_PNG then
                 str = "<img src=\"#{x[u][s].beer_label}\" title=\"#{title}\">"
             else
-                str = "#{x[u][s].beer_name}<br>#{x[u][s].brewery_name}"
+              str = "<img src=\"#{x[u][s].brewery_label}\" title=\"#{title}\"><br>#{x[u][s].beer_name}"
             end
         end
         output.write("  <td align=\"center\" >#{str}</td>\n")

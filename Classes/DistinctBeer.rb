@@ -25,6 +25,15 @@ class Distinct_beer
         @brewery_lng = inArray[21]
     end
 
+    def <=>(inRight)
+        if @beer_rating_score == inRight.beer_rating_score then
+            return @beer_bid <=> inRight.beer_bid
+        else
+            return @beer_rating_score <=> inRight.beer_rating_score
+        end 
+
+    end
+
     def beer_bid
         @beer_bid
     end
