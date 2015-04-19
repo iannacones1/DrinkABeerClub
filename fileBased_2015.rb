@@ -73,7 +73,7 @@ end
 
 output = open("table.html", "w")
 
-output.write("<html>\n<head>\n<style>\n")
+output.write("<html>\n<head>\n\t\t<meta name \"robots\" content=\"noindex\">\n<style>\n")
 output.write("table,th,td\n{border:1px solid black;\nborder-collapse:collapse;}\nth,td\n{padding:5px;}")
 output.write("\n</style>\n</head><body>\n<table>\n")
 output.write("<caption>Last Updated: #{Time.now.asctime}</caption>\n<tr>\n")

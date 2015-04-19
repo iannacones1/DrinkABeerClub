@@ -52,7 +52,7 @@ CSV.foreach($user_file, converters: :numeric) do |row|
 end
 
 output = open("#{$user}.html", "w")
-output.write("<html>\n\t<head>\n\t\t<font size=\"6\" face=\"Verdana\">#{$user}</font><br>\n\t</head>\n\t<body>\n")
+output.write("<html>\n\t<head>\n\t\t<meta name=\"robots\" content=\"noindex\">\n\t\t<font size=\"6\" face=\"Verdana\">#{$user}</font><br>\n\t</head>\n\t<body>\n")
 output.write("\t\t<pr><font face=\"Verdana\">Distinct Checkins by Year<br>\n")
 
 t = Time.new
