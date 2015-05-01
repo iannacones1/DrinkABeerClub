@@ -1,4 +1,7 @@
 #!/usr/bin/ruby
+
+DEFAULT_PNG = "https://d1c8v1qci5en44.cloudfront.net/site/assets/images/temp/badge-beer-default.png"
+
 class Distinct_beer
     def initialize(inArray)
         @beer_bid = inArray[0]

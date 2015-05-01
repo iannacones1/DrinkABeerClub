@@ -2,150 +2,160 @@
 require 'date'
 require 'csv'
 require '/home/pi/git/DrinkABeerClub/Classes/Checkin.rb'
+require '/home/pi/git/DrinkABeerClub/Classes/HtmlWriter.rb'
 
 $startTime = Time.now
 
-DEFAULT_PNG = "https://d1c8v1qci5en44.cloudfront.net/site/assets/images/temp/badge-beer-default.png"
-
 USER_CONFIG = "data/Users.csv"
-USER_COUNT = `cat #{USER_CONFIG} | wc -l`
-SET_CONFIG = "data/styles.csv"
-SET_COUNT = `cat #{SET_CONFIG} | wc -l`
+USERS = Array.new
+CSV.foreach(USER_CONFIG) { |user| USERS.push("#{user[0]}") }
 
-def getSetIndex(inSet)
-  index = 0
-  CSV.foreach(SET_CONFIG) do |row|
-      if row[0] == inSet then
-        return index
-      end
-      index = index + 1 
-  end
-  return -1
+STYLE_CONFIG = "data/styles.csv"
+STYLES = Array.new
+CSV.foreach(STYLE_CONFIG) do |row|
+    if row.size() != 2 then
+      STYLES.push(row[0])
+    end
 end
 
-x = Array.new(USER_COUNT.to_i) { Array.new(SET_COUNT.to_i) }
+x = Hash.new()
 
 # Jan 1 2015 +5 to GMT
 yearStart = DateTime.new(2015,1,1,5,0,0)
 # Jan 1 2016 +5 to GMT
 yearEnd = DateTime.new(2016,1,1,5,0,0)
 
-#load Distinct beer ratings
-puts "Loading Ratings..."
-
+#build a full list of all bid->ratings
 ratings = Hash.new()
 
-CSV.foreach(USER_CONFIG) do |user|
-    $user_file = "user_data/#{user[0]}_distinct_beers.csv"
+USERS.each do |user|
+
+    puts "Reading distinct beers for user: #{user}"
+
+    $user_file = "user_data/#{user}_distinct_beers.csv"
+
     CSV.foreach($user_file, converters: :numeric) do |row|
         ratings[row[0]] = row[12]
     end
+
 end
 
 # find highest rated for each style
-u = 0
+USERS.each do |user|
 
-CSV.foreach(USER_CONFIG) do |user|
+    puts "Reading checkins for user: #{user}"
 
-    puts "Building Styles for user: #{user[0]}"
+    if x[user].nil? then
+        x[user] = Hash.new()
+    end
 
-    $user_file = "user_data/#{user[0]}_checkins.csv"
+    $user_file = "user_data/#{user}_checkins.csv"
 
     CSV.foreach($user_file, converters: :numeric) do |row|
 
-        f = Checkin.new(row)
+        c = Checkin.new(row)
 
-        if DateTime.parse(f.created_at) >= yearStart && DateTime.parse(f.created_at) < yearEnd
-            s = getSetIndex(f.beer_style.strip)
-            if s != -1 then
+        if DateTime.parse(c.created_at) >= yearStart && DateTime.parse(c.created_at) < yearEnd then
 
-                f.setRating(ratings[f.beer_bid])
+            style = c.beer_style.strip
 
-                if x[u][s].nil? or x[u][s].beer_rating_score <= f.beer_rating_score then
-                    x[u][s] = f
+            if !STYLES.index(style).nil? then
+
+                c.setRating(ratings[c.beer_bid])
+
+                if x[user][style].nil? or x[user][style].beer_rating_score <= c.beer_rating_score then
+                    x[user][style] = c
                 end
             end         
         end
     end
-
-    u = u + 1
 end
 
-output = open("table.html", "w")
+output = HtmlWriter.new("table.html")
 
-output.write("<html>\n<head>\n\t\t<meta name \"robots\" content=\"noindex\">\n<style>\n")
-output.write("table,th,td\n{border:1px solid black;\nborder-collapse:collapse;}\nth,td\n{padding:5px;}")
-output.write("\n</style>\n</head><body>\n<table>\n")
-output.write("<caption>Last Updated: #{Time.now.asctime}</caption>\n<tr>\n")
-output.write("  <th></th>\n")
+output.openTag("body")
+output.openTag("table")
+output.startLine("caption")
+output.write("Last Updated: #{Time.now.asctime}")
+output.endLine("caption")
 
-CSV.foreach(USER_CONFIG) do |user|
-  output.write("  <th><a href=\"http://www.DrinkABeerClub.com/#{user[0]}\">#{user[0]}</a></th>\n")
+output.startRow()
+output.writeTableHeader("")
+
+USERS.each do |user|
+  output.writeTableHeader(output.getLink("http://www.DrinkABeerClub.com/#{user}", user))
 end
 
-output.write("  </tr>\n")
+output.endRow()
 
-output.write("<tr>\n  <th>Total:</th>\n")
+output.startRow()
 
-$user_totals = Array.new(USER_COUNT.to_i, 0) 
+output.writeTableHeader("Total:")
 
-u = 0
-CSV.foreach(USER_CONFIG) do |user|
-    CSV.foreach(SET_CONFIG) do |state|
-        s = getSetIndex(state[0])
-        if !x[u][s].nil? then
-          $user_totals[u] += 1
+$user_totals = Hash.new(0) 
+$user_score = Hash.new(0)
+
+USERS.each do |user|
+
+    puts "Counting totals for user: #{user}"
+
+    STYLES.each do |style|
+
+        if !x[user][style].nil? then
+            $user_totals[user] += 1
+            $user_score[user] += x[user][style].beer_rating_score
         end
+
     end
-    output.write("  <td align=\"center\">#{$user_totals[u]}\\51</td>\n")
-    u = u + 1
+
+  output.writeTableData("#{$user_totals[user]}\\#{STYLES.size()}")
 end
 
-output.write("<tr>\n  <th>Score:</th>\n")
+output.endRow()
 
-u = 0
-CSV.foreach(USER_CONFIG) do |user|
-    $score = 0
-    CSV.foreach(SET_CONFIG) do |state|
-        s = getSetIndex(state[0])
-        if !x[u][s].nil? then
-            $score += x[u][s].beer_rating_score
-        end
-    end
-    $avg = $score / $user_totals[u]
-    output.write("  <td align=\"center\">#{$score.round(3)}<br />(#{$avg.round(3)})</td>\n")
-    u = u + 1
+output.startRow()
+
+output.writeTableHeader("Score:")
+
+USERS.each do |user|
+
+    puts "Sum scores for user: #{user}"
+
+    $avg = $user_score[user] / $user_totals[user]
+    output.writeTableData("#{$user_score[user].round(3)}<br/>(#{$avg.round(3)})")
 end
 
-output.write("  </tr>\n")
+output.endRow()
 
-CSV.foreach(SET_CONFIG) do |set|
+CSV.foreach(STYLE_CONFIG) do |set|
+
+    output.startRow()
+
     if set.size() == 2 then
-        output.write("  <tr>\n    <th>#{set[0]}<br/>\n      <img src=\"#{set[1]}\">\n    </th>\n  </tr>\n")
+        output.indent()
+        output.write("<th colspan=\"#{USERS.size() + 1}\">")
+        output.write("#{set[0]}<br/><img src=\"#{set[1]}\">")
+        output.endLine("th")
     else
-        output.write("<tr>\n  <th><a href=\"https://untappd.com/beer/top_rated?type_id=#{set[1]}\">#{set[2]}</a></th>\n")
-        s = getSetIndex(set[0])
-        u = 0
-        CSV.foreach(USER_CONFIG) do |user|
-          title = ""
-          str = ""
-          if !x[u][s].nil? then
-            #            title = "#{x[u][s].beer_name}\n#{x[u][s].brewery_name}\n(#{x[u][s].beer_rating_score.round(3)})"
-            title = "(#{x[u][s].beer_rating_score.round(3)})\n#{x[u][s].beer_name}\n#{x[u][s].brewery_name}\n(#{x[u][s].beer_rating_score.round(3)})"
-            if "#{x[u][s].beer_label}" != DEFAULT_PNG then
-                str = "<img src=\"#{x[u][s].beer_label}\" title=\"#{title}\">"
-            else
-              str = "<img src=\"#{x[u][s].brewery_label}\" title=\"#{title}\"><br>#{x[u][s].beer_name}"
+        puts "Writing row for: #{set[0]}"
+        output.writeTableHeader(output.getLink("https://untappd.com/beer/top_rated?type_id=#{set[1]}", set[2]))
+ 
+        style = set[0]
+
+        USERS.each do |user|
+            str = ""
+            if !x[user][style].nil? then
+                str = x[user][style].getHtmlImg
             end
+            output.writeTableData(str)
         end
-        output.write("  <td align=\"center\" >#{str}</td>\n")
-        u = u + 1
     end
-    output.write("  </tr>\n")
-  end
+
+    output.endRow()
 end
 
-output.write("</table>\n</body>\n</html>")
+output.closeTag("table")
+output.closeTag("body")
 
 output.close
 

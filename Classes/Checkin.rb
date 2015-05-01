@@ -1,5 +1,4 @@
 #!/usr/bin/ruby
-require 'csv'
 require '/home/pi/git/DrinkABeerClub/Classes/DistinctBeer.rb'
 
 class Checkin
@@ -25,6 +24,22 @@ class Checkin
 
     def setRating(inRating)
         @beer_rating_score = inRating
+    end
+
+    def getHtmlImg
+
+        str = ""
+        title = "(#{@beer_rating_score.round(3)})\n"
+        title += "#{@beer_name}\n"
+        title += "#{@brewery_name}"
+
+        if "#{@beer_label}" != DEFAULT_PNG then
+            str = "<img src=\"#{@beer_label}\" title=\"#{title}\">"
+        else
+            str = "<img src=\"#{@brewery_label}\" title=\"#{title}\"><br>#{@beer_name}"
+        end
+
+        return str
     end
 
     def beer_rating_score
