@@ -83,7 +83,7 @@ output.startRow()
 output.writeTableHeader("")
 
 USERS.each do |user|
-  output.writeTableHeader(output.getLink("http://www.DrinkABeerClub.com/#{user}", user))
+  output.writeTableHeader(output.getLink("http://www.DrinkABeerClub.com/#{user}/#{user}", user))
 end
 
 output.endRow()

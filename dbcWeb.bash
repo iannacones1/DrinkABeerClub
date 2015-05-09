@@ -67,9 +67,11 @@ while read LINE; do
             mv $USER"_distinct_beers.csv" user_data/ 
 
             ./fileBasedUserPage.rb $USER
+            ./fileBased_BeersOfFame.rb $USER
 
             if [[ $? -eq 0 ]]; then
-                mv $USER.html /var/www/
+                mv $USER.html /var/www/$USER/
+                mv $USER"_BoF.html" /var/www/$USER/
                 mv $USER.cor MapMaker/
 
                 cd MapMaker/
@@ -77,8 +79,8 @@ while read LINE; do
                 ./MapMaker.bash $USER
 
                 if [[ $? -eq 0 ]]; then
-                    mv $USER.png /var/www/
-                    mv $USER"_usa.png" /var/www/
+                    mv $USER.png /var/www/$USER/
+                    mv $USER"_usa.png" /var/www/$USER/
                 else
                     rm $USER.png
                     rm $USER"_usa.png"
@@ -88,6 +90,7 @@ while read LINE; do
 
             else
                 rm $USER.html
+                rm $USER"_BoF.html"
                 rm $USER.cor
             fi
         fi
@@ -116,8 +119,7 @@ else
     rm -rf user_data
     cp -r user_data.bk user_data 
     echo $(data) >> failover.log
+    echo "----" >> failover.log
 fi
-
-
 
 echo $(date)

@@ -11,6 +11,7 @@ class HtmlWriter
         write("    table\n")
         write("    {\n")
         write("        border-collapse: collapse;\n")
+        write("        padding: 5px;\n")
         write("    }\n\n")
         write("    th,td\n")
         write("    {\n")

@@ -2,8 +2,6 @@
 require 'csv'
 require '/home/pi/git/DrinkABeerClub/Classes/DistinctBeer.rb'
 
-DEFAULT_PNG = "https://d1c8v1qci5en44.cloudfront.net/site/assets/images/temp/badge-beer-default.png"
-
 if ARGV[0].nil?
     puts "Please input username"
     exit 1
@@ -53,6 +51,10 @@ end
 
 output = open("#{$user}.html", "w")
 output.write("<html>\n\t<head>\n\t\t<meta name=\"robots\" content=\"noindex\">\n\t\t<font size=\"6\" face=\"Verdana\">#{$user}</font><br>\n\t</head>\n\t<body>\n")
+
+
+output.write("\t\t<pr><a href=\"http://www.DrinkABeerClub.com/#{$user}/#{$user}_BoF\">Beers of Fame</a><br>\n")
+
 output.write("\t\t<pr><font face=\"Verdana\">Distinct Checkins by Year<br>\n")
 
 t = Time.new
