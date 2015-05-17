@@ -50,12 +50,17 @@ CSV.foreach($user_file, converters: :numeric) do |row|
 end
 
 output = open("#{$user}.html", "w")
-output.write("<html>\n\t<head>\n\t\t<meta name=\"robots\" content=\"noindex\">\n\t\t<font size=\"6\" face=\"Verdana\">#{$user}</font><br>\n\t</head>\n\t<body>\n")
+output.write("<html>\n")
 
+output.write("  <head>\n")
 
-output.write("\t\t<pr><a href=\"http://www.DrinkABeerClub.com/#{$user}/#{$user}_BoF\">Beers of Fame</a><br>\n")
+output.write("    <meta name=\"robots\" content=\"noindex\">\n")
+output.write("    <font size=\"6\" face=\"Verdana\">#{$user}</font><br>\n")
+output.write("  </head>\n")
+output.write("  <body>\n")
 
-output.write("\t\t<pr><font face=\"Verdana\">Distinct Checkins by Year<br>\n")
+output.write("    <pr><font face=\"Verdana\"><a href=\"/#{$user}/#{$user}_BoF\">Beers of Fame</a></font></pr><br><br>\n")
+output.write("    <pr><font face=\"Verdana\">Distinct Checkins by Year<br>\n")
 
 t = Time.new
 
@@ -71,8 +76,8 @@ distinctBeers.each do |year, checkinArray|
 
 end
 
-output.write("\t\t</font></pr>\n")
-output.write("\t\t<pr><font face=\"Verdana\">Favorite Breweries</font><br>\n")
+output.write("\t\t</font></pr><br><br>\n")
+output.write("\t\t<pr><font face=\"Verdana\"><a href=\"/#{$user}/FavoriteBreweries.txt\">Favorite Breweries</a></font><br>\n")
 
 $i = 0
 $lastRating = 0

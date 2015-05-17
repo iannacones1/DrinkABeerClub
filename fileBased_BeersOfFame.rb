@@ -28,11 +28,25 @@ end
 output = HtmlWriter.new("#{$user}_BoF.html")
 output.openTag("body")
 output.write("<font size=\"6\" face=\"Verdana\">#{$user}</font><br>\n")
-output.write("Craft beer culture can often be very trendy, giving attention to new styles and Brewer's newest offerings. Forget the hype. The following list, thanks to <a href=\"http://www.beeradvocate.com/lists/fame/\" target=\"main\">BeerAdvocate</a>, is comprised of tried and true world class beers. So next time you don't know what beer to get, consult this list.<pr>\n")
+output.write("The following list, thanks to <a href=\"http://www.beeradvocate.com/lists/fame/\" target=\"main\">BeerAdvocate</a>, is comprised of tried and true world class beers.<br>So next time you're buying beer and don't know what beer to get, consult this list.<pr>\n")
+
+$UserCount = 0
+$TotalCount = 0
+
+CSV.foreach(BEERS_OF_FAME, converters: :numeric) do |row|
+    $TotalCount += 1
+    if distinctBeers.has_key?(row[1])
+        $UserCount += 1
+    end
+end
 
 output.openTag("table")
 
-$count = 0
+output.startRow()
+ output.writeTableHeader("Rank")
+ output.writeTableHeader("Beer")
+ output.writeTableHeader("#{$UserCount}/#{$TotalCount}")
+output.endRow()
 
 CSV.foreach(BEERS_OF_FAME, converters: :numeric) do |row|
 
@@ -44,7 +58,6 @@ CSV.foreach(BEERS_OF_FAME, converters: :numeric) do |row|
 
     str = ""
     if distinctBeers.has_key?(row[1])
-        $count += 1
         str = distinctBeers[row[1]].getHtmlImg
     end
     output.writeTableData(str)
@@ -53,7 +66,5 @@ end
 
 output.closeTag("body")
 output.closeTag("table")
-
-puts "#{$count}"
 
 output.close

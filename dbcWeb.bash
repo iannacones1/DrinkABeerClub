@@ -66,10 +66,12 @@ while read LINE; do
 
             mv $USER"_distinct_beers.csv" user_data/ 
 
-            ./fileBasedUserPage.rb $USER
             ./fileBased_BeersOfFame.rb $USER
+            ./FavBreweries.rb $USER > FavoriteBreweries.txt
+            ./fileBasedUserPage.rb $USER
 
             if [[ $? -eq 0 ]]; then
+                mv FavoriteBreweries.txt /var/www/$USER/
                 mv $USER.html /var/www/$USER/
                 mv $USER"_BoF.html" /var/www/$USER/
                 mv $USER.cor MapMaker/
