@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 require 'csv'
 require '/home/pi/git/DrinkABeerClub/Classes/DistinctBeer.rb'
+require '/home/pi/git/DrinkABeerClub/Classes/HtmlWriter.rb'
 
 if ARGV[0].nil?
     puts "Please input username"
@@ -49,35 +50,54 @@ CSV.foreach($user_file, converters: :numeric) do |row|
 
 end
 
-output = open("#{$user}.html", "w")
-output.write("<html>\n")
+output = HtmlWriter.new("#{$user}.html")
 
-output.write("  <head>\n")
+output.openTag("body")
+output.openTag("pr")
+output.indent()
+output.write("<font face=\"Verdana\">")
+output.write(output.getLink("/#{$user}/#{$user}_BoF", "Beers of Fame"))
+output.write("</font>\n")
 
-output.write("    <meta name=\"robots\" content=\"noindex\">\n")
-output.write("    <font size=\"6\" face=\"Verdana\">#{$user}</font><br>\n")
-output.write("  </head>\n")
-output.write("  <body>\n")
+output.closeTag("pr")
+output.indent()
+output.write("<br><br>\n")
 
-output.write("    <pr><font face=\"Verdana\"><a href=\"/#{$user}/#{$user}_BoF\">Beers of Fame</a></font></pr><br><br>\n")
-output.write("    <pr><font face=\"Verdana\">Distinct Checkins by Year<br>\n")
+output.openTag("pr")
+output.indent()
+output.write("<font face=\"Verdana\">\n")
+output.indent()
+output.write("    Distinct Checkins by Year<br>\n")
 
 t = Time.new
 
 distinctBeers.each do |year, checkinArray|
 
-    output.write("#{year}: #{checkinArray.size} ")
+    output.indent()
+    output.write("    #{year}: #{checkinArray.size} ")
        
     if "#{year}" == "#{t.year}"
-        output.write("(#{t.yday}) [#{t.yday - checkinArray.size}] ")      
+        output.write("(#{t.yday}) [#{t.yday - checkinArray.size}]")
     end
 
     output.write("<br>\n")
 
 end
+output.indent()
+output.write("</font>\n")
+output.closeTag("pr")
+output.indent()
+output.write("<br><br>\n")
 
-output.write("\t\t</font></pr><br><br>\n")
-output.write("\t\t<pr><font face=\"Verdana\"><a href=\"/#{$user}/FavoriteBreweries.txt\">Favorite Breweries</a></font><br>\n")
+output.openTag("pr")
+output.indent()
+output.write("<font face=\"Verdana\">\n")
+output.indent()
+output.write("    " + output.getLink("/#{$user}/FavoriteBreweries.txt", "Favorite Breweries") + "\n")
+output.indent()
+output.write("</font>\n")
+output.indent()
+output.write("<br>\n")
 
 $i = 0
 $lastRating = 0
@@ -92,20 +112,29 @@ userRating.sort_by { |brewery, rating| rating }.reverse.each do |brewery, rating
 
     #puts "#{brewery}, #{breweryCount[brewery]}, #{rating}"
 
-    output.write("\t\t\t<img src=\"#{breweryInfo[brewery].brewery_label}\" title=\"#{brewery} - #{breweryCount[brewery]} / #{rating}\">\n")
+    output.addImg("#{breweryInfo[brewery].brewery_label}", "#{brewery} - #{breweryCount[brewery]} / #{rating}")
+
     $i += 1
     $lastRating = rating
     if $i % 5 == 0
-        output.write("\t\t\t<br>\n")
+        output.indent()
+        output.write("<br>\n")
     end
 end
 
-output.write("\t\t</pr><br>\n")
+output.closeTag("pr")
+output.indent()
+output.write("<br>\n")
+output.addImg("#{$user}_usa.png", "")
+output.indent()
+output.write("<br>\n")
+output.addImg("#{$user}.png", "")
+output.indent()
+output.write("<br>\n")
+output.indent()
+output.write("Last Updated: #{Time.now.asctime}\n")
 
-output.write("\t\t<img src=\"#{$user}_usa.png\"><br>\n")
-output.write("\t\t<img src=\"#{$user}.png\"><br>\n")
-
-output.write("\n\nLast Updated: #{Time.now.asctime}")
-output.write("\t</body>\n<html>")
+output.closeTag("body")
 output.close
+
 userCor.close

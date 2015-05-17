@@ -7,6 +7,7 @@ class HtmlWriter
         openTag("html")
         openTag("head")
         writeLine("<meta name=\"robots\" content=\"noindex, nofollow\">")
+        writeLine("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">")
         openTag("style")
         write("    table\n")
         write("    {\n")
@@ -83,6 +84,10 @@ class HtmlWriter
       write(getLink(inAddr, inText))
     end
 
+    def addImg(inSrc, inTitle)
+        indent()
+        write("<img src=\"#{inSrc}\" title=\"#{inTitle}\">\n")
+    end
 
     def getLink(inAddr, inText)
        result = "<a href=\"#{inAddr}\">#{inText}</a>"
