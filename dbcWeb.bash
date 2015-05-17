@@ -68,7 +68,7 @@ while read LINE; do
 
             ./fileBased_BeersOfFame.rb $USER
             ./FavBreweries.rb $USER > FavoriteBreweries.txt
-            ./fileBasedUserPage.rb $USER
+            ./UserPage.rb $USER
 
             if [[ $? -eq 0 ]]; then
                 mv FavoriteBreweries.txt /var/www/$USER/
