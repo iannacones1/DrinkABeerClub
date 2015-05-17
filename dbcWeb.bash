@@ -120,7 +120,7 @@ else
 
     rm -rf user_data
     cp -r user_data.bk user_data 
-    echo $(data) >> failover.log
+    echo $(date) >> failover.log
     echo "----" >> failover.log
 fi
 
