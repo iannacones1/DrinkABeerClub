@@ -66,7 +66,7 @@ while read LINE; do
 
             mv $USER"_distinct_beers.csv" user_data/ 
 
-            ./fileBased_BeersOfFame.rb $USER
+            ./BeersOfFame_SingleUser.rb $USER
             ./FavBreweries.rb $USER > FavoriteBreweries.txt
             ./UserPage.rb $USER
 
