@@ -26,6 +26,7 @@ CSV.foreach($user_file, converters: :numeric) do |row|
 end
 
 output = HtmlWriter.new("#{$user}_BoF.html")
+output.closeTag("head")
 output.openTag("body")
 output.write("<font size=\"6\" face=\"Verdana\">#{$user}</font><br>\n")
 output.write("The following list, thanks to <a href=\"http://www.beeradvocate.com/lists/fame/\" target=\"main\">BeerAdvocate</a>, is comprised of tried and true world class beers.<br>So next time you're buying beer and don't know what beer to get, consult this list.<pr>\n")

@@ -21,7 +21,6 @@ class HtmlWriter
         write("        padding: 5px;\n")
         write("    }\n")
         closeTag("style")
-        closeTag("head")
     end
 
     def write(inLine)

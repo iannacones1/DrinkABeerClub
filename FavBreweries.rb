@@ -48,7 +48,7 @@ userRating.sort_by { |brewery, rating| rating }.reverse.each do |brewery, rating
         puts $Header
     end
 
-  puts "| #{$z.ljust(3)} | #{$rate.ljust(5)[0..4]} | #{brewery.encode(Encoding::ISO_8859_1).ljust(50)} | #{breweryCount[brewery].to_s.ljust(3)} |"
+  puts "| #{$z.ljust(3)} | #{$rate.ljust(5)[0..4]} | " + brewery.encode(Encoding::ISO_8859_1, {:invalid => :replace, :undef => :replace, :replace => "?"}).ljust(50)+ " | #{breweryCount[brewery].to_s.ljust(3)} |"
 
     $i += 1
     $lastRating = rating

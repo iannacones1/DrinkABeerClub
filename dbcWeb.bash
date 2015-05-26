@@ -74,26 +74,10 @@ while read LINE; do
                 mv FavoriteBreweries.txt /var/www/$USER/
                 mv $USER.html /var/www/$USER/
                 mv $USER"_BoF.html" /var/www/$USER/
-                mv $USER.cor MapMaker/
-
-                cd MapMaker/
-
-                ./MapMaker.bash $USER
-
-                if [[ $? -eq 0 ]]; then
-                    mv $USER.png /var/www/$USER/
-                    mv $USER"_usa.png" /var/www/$USER/
-                else
-                    rm $USER.png
-                    rm $USER"_usa.png"
-                fi
-
-                mv $USER.cor backup/
-
             else
+                rm FavoriteBreweries.txt
                 rm $USER.html
                 rm $USER"_BoF.html"
-                rm $USER.cor
             fi
         fi
     fi

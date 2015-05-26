@@ -73,10 +73,13 @@ end
 
 output = HtmlWriter.new("table.html")
 
+output.closeTag("head")
 output.openTag("body")
 output.openTag("table")
 output.startLine("caption")
-output.write("Last Updated: #{Time.now.asctime}")
+
+time = Time.now.strftime "%b %d %l:%M %p"
+output.write("Last Updated: #{time}")
 output.endLine("caption")
 
 output.startRow()
