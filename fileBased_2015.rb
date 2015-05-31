@@ -73,6 +73,20 @@ end
 
 output = HtmlWriter.new("table.html")
 
+output.openTag("style")
+output.write("    table\n")
+output.write("    {\n")
+output.write("        border-collapse: collapse;\n")
+output.write("        padding: 5px;\n")
+output.write("    }\n\n")
+output.write("    th,td\n")
+output.write("    {\n")
+output.write("        text-align: center;\n")
+output.write("        border: 1px dotted black;\n")
+output.write("        padding: 5px;\n")
+output.write("    }\n")
+output.closeTag("style")
+
 output.closeTag("head")
 output.openTag("body")
 output.openTag("table")

@@ -16,7 +16,7 @@ $user_file = "user_data/#{$user}_distinct_beers.csv"
 puts "Building user page for #{$user} from file: #{$user_file}"
 
 
-Brewery = Struct.new(:name, :lat, :lon)
+Brewery = Struct.new(:name, :lat, :lon, :dis)
 
 userRating = Hash.new(0)
 breweryCount = Hash.new(0)
@@ -39,7 +39,7 @@ CSV.foreach($user_file, converters: :numeric) do |row|
 
     if c.brewery_lng != 0 || c.brewery_lat != 0
       if breweryLoc[c.brewery_name].nil?
-          breweryLoc[c.brewery_name] = Brewery.new(c.brewery_name, c.brewery_lat, c.brewery_lng)
+          breweryLoc[c.brewery_name] = Brewery.new(c.brewery_name, c.brewery_lat, c.brewery_lng, c)
       end
     end
 
@@ -63,56 +63,33 @@ output.write("    <script type=\"text/javascript\"\n")
 output.write("      src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyDFVtCXPWg-x-Ryzw6z2cR8ewl0o9UUkgE\">\n")
 output.write("    </script>\n")
 output.write("\n")
+output.write("    <script type=\"text/javascript\"\n")
+output.write("      src=\"http://DrinkABeerClub.com/MapPoints.js\">\n")
+output.write("    </script>\n")
+output.write("\n")
 output.write("    <script type=\"text/javascript\">\n")
-output.write("    var infowindow = null;\n")
-output.write("\n")
-output.write("    function initialize()\n")
-output.write("    {\n")
-output.write("        var mapOptions =\n")
-output.write("        {\n")
-output.write("            center: { lat: 39.50, lng: -98.35},\n")
-output.write("            zoom: 3\n")
-output.write("        };\n")
-output.write("\n")
-output.write("        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);\n")
-output.write("\n")
-output.write("        setMarkers(map, breweries);\n")
-output.write("\n")
-output.write("        infowindow = new google.maps.InfoWindow();\n")
-output.write("    }\n")
-output.write("\n")
 output.write("    var breweries = [\n")
 
 breweryLoc.each do |key, value|
 
-str = key.gsub("'", "")
+  img = value.dis.brewery_label.gsub("https://d1c8v1qci5en44.cloudfront.net/site/brewery_logos/", "")
+  str = "#{value.dis.brewery_city}, #{value.dis.brewery_state} #{value.dis.brewery_country_name}".gsub("'", "")
 
-  output.write("                      [ '" + key.gsub("'", "") +"', #{value.lat}, #{value.lon}, '#{str}'],\n")
+  output.write("    [ '" + key.gsub("'", "") +"', #{value.lat}, #{value.lon}, '#{img}', '#{str}'],\n")
 
 end
 
 output.write("                    ];\n")
 output.write("\n")
-output.write("    function setMarkers(map, locations)\n")
+output.write("    function init()\n")
 output.write("    {\n")
-output.write("        for (var i = 0; i < locations.length; i++)\n")
-output.write("        {\n")
-output.write("            var brewery = locations[i];\n")
-output.write("            var myLatLng = new google.maps.LatLng(brewery[1], brewery[2]);\n")
-output.write("            var marker = new google.maps.Marker({\n")
-output.write("                position: myLatLng,\n")
-output.write("                map: map,\n")
-output.write("                title: brewery[0],\n")
-output.write("                html: brewery[3]\n")
-output.write("            });\n")
-output.write("\n")
-output.write("            google.maps.event.addListener(marker, 'click', function(){ infowindow.setContent(this.html); infowindow.open(map, this); });\n")
-output.write("        }\n")
+output.write("        makeMap(breweries);\n")
 output.write("    }\n")
 output.write("\n")
-output.write("    google.maps.event.addDomListener(window, 'load', initialize);\n")
+output.write("    google.maps.event.addDomListener(window, 'load', init);\n")
 output.write("    </script>\n")
 output.write("\n")
+output.write("    <font size=\"6\" face=\"Verdana\">#{$user}</font><br>\n")
 output.closeTag("head")
 output.openTag("body")
 output.openTag("pr")
