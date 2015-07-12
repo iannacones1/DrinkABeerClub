@@ -4,8 +4,6 @@ require 'csv'
 require '/home/pi/git/DrinkABeerClub/tokens/untappdConfigure.rb'
 require '/home/pi/git/DrinkABeerClub/Classes/DistinctBeer.rb'
 
-DEFAULT_PNG = "https://d1c8v1qci5en44.cloudfront.net/site/assets/images/temp/badge-beer-default.png"
-
 USER_CONFIG = "data/TestUsers.csv"
 
 if ARGV[0].nil?

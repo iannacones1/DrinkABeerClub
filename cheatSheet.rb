@@ -5,8 +5,6 @@ require '/home/pi/git/DrinkABeerClub/Classes/Checkin.rb'
 
 $startTime = Time.now
 
-DEFAULT_PNG = "https://d1c8v1qci5en44.cloudfront.net/site/assets/images/temp/badge-beer-default.png"
-
 USER_CONFIG = "data/Users.csv"
 USER_COUNT = `cat #{USER_CONFIG} | wc -l`
 SET_CONFIG = "data/styles.csv"
