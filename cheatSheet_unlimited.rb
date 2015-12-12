@@ -38,9 +38,9 @@ CSV.foreach(USER_CONFIG) do |user|
 
         if s != -1 then
 
-            if bids[s].nil? then 
+            if bids[s].nil? then
                 bids[s] = Hash.new()
-            end 
+            end
 
             bids[s][c.beer_bid] = c
 
@@ -51,7 +51,7 @@ CSV.foreach(USER_CONFIG) do |user|
     puts "...#{counter} beers read"
 end
 
-output = open("cheatSheet.html", "w")
+output = open("cheatSheet_unlimited.html", "w")
 
 output.write("<html>\n<head>\n<style>\n")
 output.write("table,th,td\n{border:1px solid black;\nborder-collapse:collapse;}\nth,td\n{padding:5px;}")
@@ -76,27 +76,26 @@ CSV.foreach(SET_CONFIG) do |set|
                 break
             end
 
-            if beer.beer_rating_count >= 1000 then
-                puts "--- #{beer.beer_name} - #{beer.brewery_name} :#{beer.beer_rating_score.round(3)}"
-  
-                img = ""
-                if "#{beer.beer_label}" != DEFAULT_PNG then
-                  img = "#{beer.beer_label}"
-                else
-                  img = "#{beer.brewery_label}"
-                end
 
-#                search = "https://www.google.com/search?q=#{beer.beer_name}+#{beer.brewery_name}+site:beermenus.com&btnI"              
-                search = "https://www.beermenus.com/search?q=#{beer.beer_name}"              
-                search = search.gsub(" ", "+")
-
-                str = "<a href=\"#{search}\" target=\"main\"><img src=\"#{img}\"><br></a>"
-   
-                title = "#{beer.beer_name}<br>#{beer.brewery_name}<br>(#{beer.beer_rating_score.round(3)})"
-                output.write("  <td align=\"center\" >#{str}#{title}</td>\n")
+            puts "--- #{beer.beer_name} - #{beer.brewery_name} :#{beer.beer_rating_score.round(3)}"
   
-                $i += 1
+            img = ""
+            if "#{beer.beer_label}" != DEFAULT_PNG then
+              img = "#{beer.beer_label}"
+            else
+              img = "#{beer.brewery_label}"
             end
+
+            search = "https://www.beermenus.com/search?q=#{beer.beer_name}"              
+            search = search.gsub(" ", "+")
+
+            str = "<a href=\"#{search}\" target=\"main\"><img src=\"#{img}\"><br></a>"
+   
+            title = "#{beer.beer_name}<br>#{beer.brewery_name}<br>(#{beer.beer_rating_score.round(3)})"
+            output.write("  <td align=\"center\" >#{str}#{title}</td>\n")
+  
+            $i += 1
+
         end
 
         output.write("  </tr>\n")
