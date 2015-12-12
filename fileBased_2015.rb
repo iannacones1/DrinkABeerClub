@@ -6,7 +6,7 @@ require '/home/pi/git/DrinkABeerClub/Classes/HtmlWriter.rb'
 
 $startTime = Time.now
 
-USER_CONFIG = "data/Users.csv"
+USER_CONFIG = "data/Users_2015.csv"
 USERS = Array.new
 CSV.foreach(USER_CONFIG) { |user| USERS.push("#{user[0]}") }
 
@@ -14,7 +14,7 @@ STYLE_CONFIG = "data/styles.csv"
 STYLES = Array.new
 CSV.foreach(STYLE_CONFIG) do |row|
     if row.size() != 2 then
-      STYLES.push(row[0])
+        STYLES.push(row[0])
     end
 end
 
@@ -138,7 +138,12 @@ USERS.each do |user|
 
     puts "Sum scores for user: #{user}"
 
-    $avg = $user_score[user] / $user_totals[user]
+    if $user_totals[user] != 0 then
+        $avg = $user_score[user] / $user_totals[user]
+    else
+        $avg = 0
+    end
+
     output.writeTableData("#{$user_score[user].round(3)}<br/>(#{$avg.round(3)})")
 end
 
