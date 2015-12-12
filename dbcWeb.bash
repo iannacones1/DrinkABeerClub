@@ -16,7 +16,7 @@ if [[ $hour -ne 0 ]] && [[ $hour -le $USER_COUNT ]]; then
   
     if [[ $minute -ne 0 ]] && [[ $minute -ne 30 ]]; then
         echo "Exiting hour=$hour minute=$minute"
-        exit 1
+#        exit 1
     fi
 
 fi
