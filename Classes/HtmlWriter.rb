@@ -7,7 +7,7 @@ class HtmlWriter
         openTag("html")
         openTag("head")
         writeLine("<meta name=\"robots\" content=\"noindex, nofollow\">")
-        writeLine("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">")
+        writeLine("<meta charset=\"UTF-8\">")
     end
 
     def write(inLine)
