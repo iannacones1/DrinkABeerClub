@@ -13,8 +13,6 @@ end
 
 # Jan 1 2015 +5 to GMT
 yearStart = DateTime.new(2015,1,1,5,0,0)
-# Jan 1 2016 +5 to GMT
-yearEnd = DateTime.new(2016,1,1,5,0,0)
 
 oauth = NRB::Untappd::API.new access_token: getToken
 
@@ -35,7 +33,9 @@ $index = 0
 `touch #{$temp_file}`
 `rm #{$temp_file}`
 
-`touch #{$user_file}`
+if !File.exist?("#{$user_file}")
+    `touch #{$user_file}`
+end
 
 $last_bid
 
@@ -113,6 +113,7 @@ temp.close
 `cat #{$user_file} >> #{$temp_file}`
 
 if $additions == 0
+    puts "removing file no additions"
     `rm #{$temp_file}`
 end
 
