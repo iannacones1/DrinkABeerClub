@@ -95,7 +95,7 @@ output.openTag("body")
 output.openTag("pr")
 output.indent()
 output.write("<font face=\"Verdana\">")
-output.write(output.getLink("/#{$user}/#{$user}_BoF", "Beers of Fame"))
+output.write(output.getLink("/BeersOfFame", "Beers of Fame"))
 output.write("</font>\n")
 
 output.closeTag("pr")
@@ -116,7 +116,7 @@ distinctBeers.each do |year, checkinArray|
     output.write("    #{year}: #{checkinArray.size} ")
        
     if "#{year}" == "#{t.year}"
-        output.write("(#{t.yday}) [#{t.yday - checkinArray.size}]")
+      output.write("(#{t.yday}) [#{t.yday - checkinArray.size}]  -- Rate: #{(Float(checkinArray.size) / Float(t.yday)).round(3)}  Projected: #{(Float(checkinArray.size) / Float(t.yday) * Float(365)).to_i}")
     end
 
     output.write("<br>\n")
