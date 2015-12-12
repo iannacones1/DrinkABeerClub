@@ -42,6 +42,16 @@ class Checkin
         return str
     end
 
+    def <=>(inRight)
+        if @beer_bid == inRight.beer_bid
+            return 0
+        elsif @beer_rating_score < inRight.beer_rating_score
+            return +1
+        else
+            return -1
+        end
+    end
+
     def beer_rating_score
         @beer_rating_score
     end
