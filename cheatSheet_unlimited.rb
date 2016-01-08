@@ -7,7 +7,7 @@ $startTime = Time.now
 
 USER_CONFIG = "data/Users.csv"
 USER_COUNT = `cat #{USER_CONFIG} | wc -l`
-SET_CONFIG = "data/styles.csv"
+SET_CONFIG = "data/styles2016.csv"
 SET_COUNT = `cat #{SET_CONFIG} | wc -l`
 
 def getSetIndex(inSet)
