@@ -15,11 +15,11 @@ echo "LOCK $LOCK_FILE"
 
 cd /home/pi/git/DrinkABeerClub/scripts
 
-./DataGrabber.sh | tee -a logs/DataGrapper.log
+./DataGrabber.sh | tee logs/DataGrapper.log
 
-./HtmlWriter.sh | tee -a logs/HtmlWriter.log
+./HtmlWriter.sh | tee logs/HtmlWriter.log
 
-./CheatSheet.bash | tee -a logs/CheatSheet.log
+./CheatSheet.bash | tee logs/CheatSheet.log
 
 echo "UNLOCK $LOCK_FILE"
 rm $LOCK_FILE

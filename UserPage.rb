@@ -108,7 +108,7 @@ output.write("<font face=\"Verdana\">\n")
 output.indent()
 output.write("    Distinct Checkins by Year<br>\n")
 
-t = Time.new
+t = Time.now
 
 distinctBeers.each do |year, checkinArray|
 
@@ -116,7 +116,7 @@ distinctBeers.each do |year, checkinArray|
     output.write("    #{year}: #{checkinArray.size} ")
        
     if "#{year}" == "#{t.year}"
-      output.write("(#{t.yday}) [#{t.yday - checkinArray.size}]  -- Rate: #{(Float(checkinArray.size) / Float(t.yday)).round(3)}  Projected: #{(Float(checkinArray.size) / Float(t.yday) * Float(365)).to_i}")
+      output.write("(#{t.yday}) [#{t.yday - checkinArray.size}]  -- Rate: #{(Float(checkinArray.size) / Float(t.yday)).round(3)}  Projected: #{(Float(checkinArray.size) / Float(t.yday) * Float(Date.new(t.year,12,31).yday)).to_i}")
     end
 
     output.write("<br>\n")
