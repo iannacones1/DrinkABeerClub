@@ -55,7 +55,8 @@ if [ -n "$UPDATE" ]; then
     cd /home/pi/git/DrinkABeerClub
 
     #./fileBased_2015.rb
-    ./styleBased.rb 2016 data/styles2016.csv data/Users_2016.csv
+    #./styleBased.rb 2016 data/styles2016.csv data/Users_2016.csv
+    ./regionStyleBased.rb 2017 data/2017_styles.csv data/Users_2016.csv data/Regions.csv
 
     if [[ $? -eq 0 ]]; then
         mv table.html /var/www/table.html

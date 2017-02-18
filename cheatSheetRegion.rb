@@ -2,35 +2,20 @@
 require 'date'
 require 'csv'
 require '/home/pi/git/DrinkABeerClub/Classes/Checkin.rb'
+require '/home/pi/git/DrinkABeerClub/Classes/RegionMap.rb'
+require '/home/pi/git/DrinkABeerClub/Classes/StyleMap.rb'
 
 $startTime = Time.now
 
-USER_CONFIG = "data/Users.csv"
+STYLE_CONFIG = "data/2017_styles.csv"
+REGION_CONFIG = "data/Regions.csv"
+
+REGIONS = RegionMap.new(REGION_CONFIG)
+STYLES = StyleMap.new(STYLE_CONFIG)
+
+USER_CONFIG = "data/Users_2016.csv"
 USER_COUNT = `cat #{USER_CONFIG} | wc -l`
-STYLE_CONFIG = "data/styles2016.csv"
-SET_COUNT = `cat #{STYLE_CONFIG} | wc -l`
 
-STYLES = Array.new
-CSV.foreach(STYLE_CONFIG) do |row|
-    if row.size() != 2 then
-        STYLES.push(row[0].gsub(/\s+/,""))
-    end
-end
-
-#def getSetIndex(inSet)
-#  inStyle = inSet.gsub(/\s+/,""))
-#  index = 0
-#  CSV.foreach(SET_CONFIG) do |row|
-#      style = row[0].gsub(/\s+/,""))
-#      if style == inStyle then
-#        return index
-#      end
-#      index = index + 1
-#  end
-#  return -1
-#end
-
-#bids = Array.new(SET_COUNT.to_i) { Hash.new() }
 bids = Hash.new()
 
 CSV.foreach(USER_CONFIG) do |user|
@@ -44,15 +29,23 @@ CSV.foreach(USER_CONFIG) do |user|
 
         c = Distinct_beer.new(row)
 
-        s = c.beer_style.gsub(/\s+/,"")
+#next if c.is_homebrew
 
-        if !STYLES.index(s).nil? then
+        s = STYLES.getStyle(c.beer_style)
+
+        if !s.nil? then
 
             if bids[s].nil? then
                 bids[s] = Hash.new()
             end
 
-            bids[s][c.beer_bid] = c
+            r = REGIONS.getRegion(c)
+
+            if bids[s][r].nil? then
+                bids[s][r] = Hash.new()
+            end
+
+            bids[s][r][c.beer_bid] = c
 
         end
         counter += 1
@@ -67,17 +60,16 @@ output.write("<html>\n<head>\n<meta charset=\"UTF-8\">\n<style>\n")
 output.write("table,th,td\n{border:1px solid black;\nborder-collapse:collapse;}\nth,td\n{padding:5px;}")
 output.write("\n</style>\n</head><body>\n<table>\n")
 
+REGIONS.getRegionList().each do |region|
+    output.write("  <tr>\n    <th>#{region}</th></tr>\n")
+    STYLES.getStyleList.each do |style|
+        puts "#{style}"
 
-STYLES.each { |set|
-
-        s = set        
-        puts "#{set}"
-
-        output.write("  <tr>\n    <th>#{set}</th>\n")
+        output.write("  <tr>\n    <th colspan=\"11\">#{style}</th>\n")
   
         $i = 0
 
-        bids[s].values.sort.reverse.each do |beer|
+        bids[style][region].values.sort.reverse.each do |beer|
 
             if $i >= 10
                 break
@@ -105,8 +97,9 @@ STYLES.each { |set|
         end
 
         output.write("  </tr>\n")
-
-}
+    end
+    
+end
 
 output.write("</table>\n</body>\n</html>")
 

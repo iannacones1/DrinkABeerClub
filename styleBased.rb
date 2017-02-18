@@ -22,7 +22,7 @@ STYLE_CONFIG = "#{ARGV[1]}"
 STYLES = Array.new
 CSV.foreach(STYLE_CONFIG) do |row|
     if row.size() != 2 then
-        STYLES.push(row[0])
+        STYLES.push(row[0].gsub(/\s+/,""))
     end
 end
 
@@ -65,7 +65,7 @@ USERS.each do |user|
 
         if DateTime.parse(c.created_at) >= yearStart && DateTime.parse(c.created_at) < yearEnd then
 
-            style = c.beer_style.strip
+            style = c.beer_style.gsub(/\s+/,"")
 
             if !STYLES.index(style).nil? then
 
@@ -170,7 +170,7 @@ CSV.foreach(STYLE_CONFIG) do |set|
         puts "Writing row for: #{set[0]}"
         output.writeTableHeader(output.getLink("https://untappd.com/beer/top_rated?type_id=#{set[1]}", set[2]))
  
-        style = set[0]
+        style = set[0].gsub(/\s+/,"")
 
         USERS.each do |user|
             str = ""

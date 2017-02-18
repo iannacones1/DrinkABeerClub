@@ -1,12 +1,12 @@
 The German,http://upload.wikimedia.org/wikipedia/en/thumb/b/ba/Flag_of_Germany.svg/125px-Flag_of_Germany.svg.png
 Dampfbier,234,Dampfbier
-Gose,81,Gose
+Sour - Gose,81,Gose
 Lager - Dortmunder / Export,190,Lager - Dortmunder / Export
 Pilsner - Imperial / Double,156,Pilsner - Imperial / Double
 Schwarzbier,43,Schwarzbier
 Märzen,35,Märzen
 Old Ale,36,Old Ale
-Lager -  Vienna / Amber,50,Lager -  Vienna / Amber
+Lager - Vienna,50,Lager - Vienna
 Kölsch,30,Kolsch
 Hefeweizen,24,Hefeweizen
 Kellerbier / Zwickelbier,106,Kellerbier / Zwickelbier
@@ -31,9 +31,9 @@ The Belgians,http://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_Be
 Belgian Quad,64,Belgian Quad
 Blonde Ale - Belgian Blonde / Golden,242,Blonde Ale - Belgian Blonde / Golden
 Belgian Strong Dark Ale,91,Belgian Strong Dark Ale
-Sour Ale,70,Sour Ale
-Lambic,75,Lambic
-Flanders Red Ale,179,Flanders Red Ale
+Sour - Ale,70,Sour
+Lambic - Other,75,Lambic - Other
+Sour - Flanders Red Ale,179,Flanders Red Ale
 Brown Ale - Belgian,229,Brown Ale - Belgian
 Pale Ale - Belgian,9,Pale Ale - Belgian
 Patersbier,133,Patersbier

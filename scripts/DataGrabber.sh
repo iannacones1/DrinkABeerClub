@@ -39,7 +39,6 @@ if [[ $hour -ge $USER_COUNT ]] || [[ $minute -eq 0 ]]; then
                 rm $USER"_checkins.csv"
             fi
             echo "issue write user checkins: $USER; exit"
-            rm $LOCK_FILE
             exit 1
         fi
 
@@ -54,7 +53,6 @@ if [[ $hour -ge $USER_COUNT ]] || [[ $minute -eq 0 ]]; then
                     rm $USER"_distinct_beers.csv"
                 fi
                 echo "issue write user distinct: $USER; exit"
-                rm $LOCK_FILE
                 exit 1
             fi
 
