@@ -29,6 +29,7 @@ IPA - Red,IPA
 IPA - Session / India Session Ale,IPA
 IPA - Triple,DIPA
 IPA - White,IPA
+IPA - New England,IPA
 Kölsch,Light Lager
 Lager - Amber,Light Lager
 Lager - American Amber / Red,Light Lager
@@ -46,11 +47,13 @@ Lager - Pale,Light Lager
 Lager - Red,Light Lager
 Lager - Vienna,Light Lager
 Lager - Winter,Dark Lager
+Lambic - Faro,Sour
 Lambic - Framboise,Sour
 Lambic - Fruit,Sour
+Lambic - Gueuze,Sour
 Lambic - Kriek,Sour
-Lambic - Other,Sour
-Maibock/Helles Bock,Light Lager
+Lambic - Traditional,Sour
+Maibock / Heller (Helles) Bock,Light Lager
 Märzen,Light Lager
 Pale Ale - American,Pale Ale
 Pale Ale - Australian,Pale Ale
@@ -79,13 +82,12 @@ Saison / Farmhouse Ale,Saison
 Schwarzbier,Dark Lager
 Scotch Ale / Wee Heavy,Big Beer
 Sour - Ale,Sour
-Sour - American Wild Ale,Sour
+American Wild Ale,Sour
 Sour - Berliner Weisse,Sour
 Sour - Farmhouse IPA,IPA
 Sour - Flanders Oud Bruin,Sour
 Sour - Flanders Red Ale,Sour
 Sour - Gose,Sour
-Sour - Gueuze,Sour
 Stout - American,Stout/Porter
 Stout - American Imperial / Double,Stout/Porter
 Stout - Foreign / Export,Stout/Porter
