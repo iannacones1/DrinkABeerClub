@@ -29,7 +29,7 @@ while IFS= read -r -d $'\0' file; do
 
     ./FavBreweries.rb $USER > FavoriteBreweries.txt
     if [[ $? -eq 0 ]]; then
-        mv FavoriteBreweries.txt /var/www/$USER/
+        mv FavoriteBreweries.txt /var/www/html/$USER/
     else
         rm FavoriteBreweries.txt
         handleBadData
@@ -37,15 +37,15 @@ while IFS= read -r -d $'\0' file; do
 
     ./UserPage.rb $USER
     if [[ $? -eq 0 ]]; then
-        mv $USER.html /var/www/$USER/
+        mv $USER.html /var/www/html/$USER/
     else
         rm $USER.html
         handleBadData
     fi
 
-done < <(find user_data -type f -newer /var/www/table.html -name "*_distinct_beers.csv" -print0)
+done < <(find user_data -type f -newer /var/www/html/table.html -name "*_distinct_beers.csv" -print0)
 
-UPDATE=`find user_data -type f -newer /var/www/table.html -name "*_checkins.csv"`
+UPDATE=`find user_data -type f -newer /var/www/html/table.html -name "*_checkins.csv"`
 
 if [ -n "$UPDATE" ]; then
 
@@ -56,10 +56,11 @@ if [ -n "$UPDATE" ]; then
 
     #./fileBased_2015.rb
     #./styleBased.rb 2016 data/styles2016.csv data/Users_2016.csv
-    ./regionStyleBased.rb 2017 data/2017_styles.csv data/Users_2016.csv data/Regions.csv
+    #./regionStyleBased.rb 2017 data/2017_styles.csv data/Users_2016.csv data/Regions.csv
+    ./2018_DaBC.rb 2018 data/2018_styles.csv data/2018_Users.csv data/2018_Regions.csv
 
     if [[ $? -eq 0 ]]; then
-        mv table.html /var/www/table.html
+        mv table.html /var/www/html/table.html
         rm -rf user_data.bk
         cp -r user_data user_data.bk
     else
@@ -69,7 +70,7 @@ if [ -n "$UPDATE" ]; then
 
     ./BeersOfFame_AllUserTable.rb
     if [[ $? -eq 0 ]]; then
-        mv "BeersOfFame.html" /var/www/
+        mv "BeersOfFame.html" /var/www/html/
     else
         rm "BeersOfFame.html"
         handleBadData

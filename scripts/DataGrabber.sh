@@ -6,7 +6,7 @@ hour=${hour#0}
 
 cd /home/pi/git/DrinkABeerClub
 
-USERS="data/Users_2016.csv"
+USERS="data/2018_DataUsers.csv"
 
 USER_COUNT=$(cat $USERS | wc -l)
 
@@ -42,9 +42,11 @@ if [[ $hour -ge $USER_COUNT ]] || [[ $minute -eq 0 ]]; then
             exit 1
         fi
 
-        if [ -e $USER"_checkins.csv" ]; then
+        if [[ ! -e "user_data/"$USER"_distinct_beers.csv" || -e $USER"_checkins.csv" ]]; then
 
-            mv $USER"_checkins.csv" user_data/
+            if [ -e $USER"_checkins.csv" ]; then
+                mv $USER"_checkins.csv" user_data/
+            fi
 
             ./writeUserDistinctBeers.rb $USER
 

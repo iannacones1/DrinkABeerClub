@@ -1,0 +1,28 @@
+HEADER,Germany,https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/Flag_of_Germany.svg/125px-Flag_of_Germany.svg.png
+STYLE,Pilsner,Germany
+STYLE,Berliner Weisse/Gose,Germany
+STYLE,Hefeweizen,Germany
+STYLE,Light Lager,Germany
+STYLE,Amber Lager,Germany
+STYLE,Dark Lager,Germany
+STYLE,Bright Bock,Germany
+STYLE,Dark Bock,Germany
+HEADER,Franco-Belgian,http://www.drinkabeerclub.com/content/125px-Belgium.png,https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Flag_of_France.svg/125px-Flag_of_France.svg.png
+STYLE,Single/Blonde,Franco-Belgian
+STYLE,Belgian Dubbel,Franco-Belgian
+STYLE,Belgian Tripel,Franco-Belgian
+STYLE,Belgian Quad,Franco-Belgian
+STYLE,Saison,Franco-Belgian
+STYLE,Flanders,Franco-Belgian
+STYLE,Witbier,Franco-Belgian
+STYLE,Belgian Strong Golden Ale,Franco-Belgian
+STYLE,Lambic,Franco-Belgian
+HEADER,The British Isles,https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Flag_of_the_United_Kingdom.svg/125px-Flag_of_the_United_Kingdom.svg.png,https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Flag_of_Ireland.svg/125px-Flag_of_Ireland.svg.png
+STYLE,Pale Ale,The British Isles
+STYLE,Pub Ale,The British Isles
+STYLE,Porter,The British Isles
+STYLE,Lite Stout,The British Isles
+STYLE,Dark Stout,The British Isles
+STYLE,Russian Imperial Stout,The British Isles
+STYLE,Scotch Ale,The British Isles
+STYLE,Barleywine,The British Isles

@@ -11,8 +11,8 @@ if ARGV[0].nil?
     exit 1
 end
 
-# Jan 1 2016 +5 to GMT
-yearStart = DateTime.new(2017,1,1,5,0,0)
+# Jan 1 2018 +5 to GMT
+yearStart = DateTime.new(2018,1,1,5,0,0)
 
 oauth = NRB::Untappd::API.new access_token: getToken
 

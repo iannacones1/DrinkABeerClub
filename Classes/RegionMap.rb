@@ -30,6 +30,7 @@ class RegionMap
 
         if inCheckin.brewery_country_name == "United States" then
             puts "UNKNOWN region for US beer: #{inCheckin.beer_name} #{inCheckin.brewery_name}"
+            return "ERROR"
         end
 
         return "OCONUS"

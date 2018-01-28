@@ -95,7 +95,7 @@ output.openTag("body")
 output.openTag("pr")
 output.indent()
 output.write("<font face=\"Verdana\">")
-output.write(output.getLink("/BeersOfFame", "Beers of Fame"))
+output.write(output.getLink("/BeersOfFame.html", "Beers of Fame"))
 output.write("</font>\n")
 
 output.closeTag("pr")

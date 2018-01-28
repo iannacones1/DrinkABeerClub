@@ -3,7 +3,7 @@ require 'csv'
 require '/home/pi/git/DrinkABeerClub/Classes/DistinctBeer.rb'
 require '/home/pi/git/DrinkABeerClub/Classes/HtmlWriter.rb'
 
-USER_CONFIG = "data/Users_2016.csv"
+USER_CONFIG = "data/2018_Users.csv"
 USERS = Array.new
 CSV.foreach(USER_CONFIG) { |user| USERS.push("#{user[0]}") }
 
