@@ -44,7 +44,7 @@ end
 
 puts "Last BID: #{$last_bid}"
 
-feed = oauth.user_distinct_beers(username: "#{$user}", offset: $index)
+feed = oauth.user_distinct_beers(username: "#{$user}", offset: $index, limit: 50)
 
 temp = CSV.open($temp_file, 'w')
 
@@ -94,10 +94,10 @@ while feed.body.response.beers.items.count > 0 do
         break
     end
 
-    if feed.body.response.beers.items.count < 25
+    if feed.body.response.beers.items.count < 50
         feed.body.response.beers.items.clear
     else
-      feed = oauth.user_distinct_beers(username: "#{$user}", offset: $index)
+      feed = oauth.user_distinct_beers(username: "#{$user}", offset: $index, limit: 50)
       puts oauth.rate_limit.inspect
     end
 

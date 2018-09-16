@@ -10,6 +10,9 @@ USERS="data/2018_DataUsers.csv"
 
 USER_COUNT=$(cat $USERS | wc -l)
 
+echo "<<<<< ENTER DATA GRABBER >>>>>"
+echo "<<<<< $hour:$minute >>>>>"
+
 if [[ $hour -ge $USER_COUNT ]] || [[ $minute -eq 0 ]]; then
 
     echo "Collecting User Data..."
@@ -28,8 +31,11 @@ if [[ $hour -ge $USER_COUNT ]] || [[ $minute -eq 0 ]]; then
         # time (e.g. Beer Label, Avg Rating)
         if [[ $index -eq $hour ]]; then
            echo "Removing user_data for:" $USER
-           rm "user_data/"$USER"_checkins.csv"
-           rm "user_data/"$USER"_distinct_beers.csv"
+           #rm "user_data/"$USER"_checkins.csv"
+           #rm "user_data/"$USER"_distinct_beers.csv"
+           echo "" > "user_data/"$USER"_checkins.csv"
+           echo "" > "user_data/"$USER"_distinct_beers.csv"
+	   sleep $index
         fi
 
         ./writeUserCheckins.rb $USER
@@ -39,6 +45,7 @@ if [[ $hour -ge $USER_COUNT ]] || [[ $minute -eq 0 ]]; then
                 rm $USER"_checkins.csv"
             fi
             echo "issue write user checkins: $USER; exit"
+	    echo "<<<<< EXIT DATA GRABBER >>>>>"
             exit 1
         fi
 
@@ -55,6 +62,7 @@ if [[ $hour -ge $USER_COUNT ]] || [[ $minute -eq 0 ]]; then
                     rm $USER"_distinct_beers.csv"
                 fi
                 echo "issue write user distinct: $USER; exit"
+		echo "<<<<< EXIT DATA GRABBER >>>>>"
                 exit 1
             fi
 
@@ -71,3 +79,4 @@ else
     echo "Skipping Time: $hour:$minute"
 
 fi
+echo "<<<<< EXIT DATA GRABBER >>>>>"
