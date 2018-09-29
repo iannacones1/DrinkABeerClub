@@ -50,7 +50,14 @@ temp = CSV.open($temp_file, 'w')
 
 $additions = 0
 
-while feed.body.response.beers.items.count > 0 do
+while !feed.nil? &&
+      !feed.body.nil? &&
+      !feed.body.response.nil? &&
+       feed.body.response.size > 0 &&
+      !feed.body.response.beers.nil? &&
+       feed.body.response.beers.size > 0 &&
+      !feed.body.response.beers.items.nil? &&
+       feed.body.response.beers.items.count > 0 do
 
     $index = $index + feed.body.response.beers.items.count
 

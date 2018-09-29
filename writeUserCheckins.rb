@@ -56,9 +56,14 @@ temp = CSV.open($temp_file, 'w')
 
 $additions = 0
 
-while feed.body.response.size > 0 &&
-      feed.body.response.checkins.size > 0 &&
-      feed.body.response.checkins.items.count > 0 &&
+while !feed.nil? &&
+      !feed.body.nil? &&
+      !feed.body.response.nil? &&
+       feed.body.response.size > 0 &&
+      !feed.body.response.checkins.nil? &&
+       feed.body.response.checkins.size > 0 &&
+      !feed.body.response.checkins.items.nil? &&
+       feed.body.response.checkins.items.count > 0 &&
       DateTime.parse(feed.body.response.checkins.items.first.created_at) >= yearStart do
 
     puts "#{DateTime.parse(feed.body.response.checkins.items.first.created_at).asctime}"

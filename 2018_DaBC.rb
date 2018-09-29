@@ -84,8 +84,8 @@ USERS.each do |user|
 
                 region = REGIONS.getRegion(checkin, style)
 
-                if tableHash[user][style][region].nil? or
-                    tableHash[user][style][region].beer_rating_score <= checkin.beer_rating_score then
+                if tableHash[user][style][region].nil? ||
+                   tableHash[user][style][region].beer_rating_score <= checkin.beer_rating_score then
                     #puts "#{user} #{style} #{region} #{checkin.beer_name}"
                     tableHash[user][style][region] = checkin
                 end
