@@ -26,6 +26,10 @@ distinctBeers = Hash.new
 
 CSV.foreach($user_file, converters: :numeric) do |row|
 
+    if row.empty?
+      next;
+    end
+  
     c = Distinct_beer.new(row)
 
     d = Date.parse(c.first_had)

@@ -2,11 +2,13 @@
 
 handleBadData ()
 {
-    echo 'handleBadData ()'
+    echo 'handleBadData () '$1
 
-    rm -rf user_data
+    cd /home/pi/git/DrinkABeerClub
+    
+    mv user_data user_data.fail
     cp -r user_data.bk user_data
-    echo $(date) >> failover.log
+    echo $(date) $1 >> failover.log
     echo "----" >> failover.log
 
     exit 1
@@ -24,7 +26,7 @@ while IFS= read -r -d $'\0' file; do
 #        mv $USER"_BoF.html" /var/www/$USER/
 #    else
 #        rm $USER"_BoF.html"
-#        handleBadData
+#        handleBadData $USER
 #    fi    
 
     ./FavBreweries.rb $USER > FavoriteBreweries.txt
@@ -32,7 +34,7 @@ while IFS= read -r -d $'\0' file; do
         mv FavoriteBreweries.txt /var/www/html/$USER/
     else
         rm FavoriteBreweries.txt
-        handleBadData
+        handleBadData $USER
     fi
 
     ./UserPage.rb $USER
@@ -40,7 +42,7 @@ while IFS= read -r -d $'\0' file; do
         mv $USER.html /var/www/html/$USER/
     else
         rm $USER.html
-        handleBadData
+        handleBadData $USER
     fi
 
 done < <(find user_data -type f -newer /var/www/html/table.html -name "*_distinct_beers.csv" -print0)
@@ -65,7 +67,7 @@ if [ -n "$UPDATE" ]; then
         cp -r user_data user_data.bk
     else
         rm table.html
-        handleBadData
+        handleBadData "table"
     fi
 
     ./BeersOfFame_AllUserTable.rb
@@ -73,7 +75,7 @@ if [ -n "$UPDATE" ]; then
         mv "BeersOfFame.html" /var/www/html/
     else
         rm "BeersOfFame.html"
-        handleBadData
+        handleBadData "table"
     fi    
 
 else

@@ -17,6 +17,10 @@ breweryInfo = Hash.new
 
 CSV.foreach($user_file, converters: :numeric) do |row|
 
+    if row.empty?
+      next;
+    end   
+    
     c = Distinct_beer.new(row)
 
     userRating[c.brewery_name] += (c.rating_score == 0 ? c.beer_rating_score : c.rating_score)
