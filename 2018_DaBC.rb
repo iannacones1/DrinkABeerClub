@@ -31,21 +31,6 @@ STYLES = StyleMap.new(STYLE_CONFIG)
 USERS = Array.new()
 CSV.foreach(USER_CONFIG) { |user| USERS.push("#{user[0]}") }
 
-#build a full list of all bid->ratings
-puts "Reading distinct beers for all users (need this for ratings)"
-ratings = Hash.new()
-
-USERS.each do |user|
-    $user_file = "user_data/#{user}_distinct_beers.csv"
-    puts "Reading distinct beers for user: #{user}"
-    CSV.foreach($user_file, converters: :numeric) do |row|
-        bid = row[0]
-        rating = row[12]
-        ratings[bid] = rating
-    end
-
-end
-
 # Jan 1 2015 +5 to GMT
 yearStart = DateTime.new(ARGV[0].to_i,1,1,5,0,0)
 # Jan 1 2016 +5 to GMT
@@ -53,24 +38,71 @@ yearEnd = DateTime.new(ARGV[0].to_i + 1,1,1,5,0,0)
 
 tableHash = Hash.new() # USER STYLE REGION
 
-COUNTRYS = Array.new()
+#build a full list of all bid->ratings
+puts "Reading distinct beers for all users (need this for ratings)"
+ratings = Hash.new()
+
+USERS.each do |user|
+    if tableHash[user].nil? then
+        tableHash[user] = Hash.new()
+    end
+  
+    $user_file = "user_data/#{user}_distinct_beers.csv"
+    puts "Reading distinct beers for user: #{user}"
+    CSV.foreach($user_file, converters: :numeric) do |row|
+
+        if row.empty? then
+            next
+        end
+      
+        distinctBeer = Distinct_beer.new(row)
+        bid = distinctBeer.beer_bid
+        rating = distinctBeer.beer_rating_score
+        ratings[bid] = rating
+
+        if DateTime.parse(distinctBeer.recent_created_at) >= yearStart then
+
+            style = STYLES.getStyle(distinctBeer.beer_style)
+
+            if !style.nil? then
+
+                if tableHash[user][style].nil? then
+                    tableHash[user][style] = Hash.new()
+                end
+
+                region = REGIONS.getRegion(distinctBeer, style)
+
+                if tableHash[user][style][region].nil? ||
+                   tableHash[user][style][region].beer_rating_score <= rating then
+
+                   tableHash[user][style][region] = distinctBeer
+                end
+            end         
+        end
+
+        
+    end
+
+end
+
 
 # find highest rated for each style
 USERS.each do |user|
 
     puts "Reading checkins for user: #{user}"
 
-    if tableHash[user].nil? then
-        tableHash[user] = Hash.new()
-    end
-
     $user_file = "user_data/#{user}_checkins.csv"
 
     CSV.foreach($user_file, converters: :numeric) do |row|
 
+        if row.empty?
+            next
+        end
+      
         checkin = Checkin.new(row)
 
-        if DateTime.parse(checkin.created_at) >= yearStart && DateTime.parse(checkin.created_at) < yearEnd then
+        if DateTime.parse(checkin.created_at) >= yearStart &&
+           DateTime.parse(checkin.created_at) < yearEnd then
 
             style = STYLES.getStyle(checkin.beer_style)
 

@@ -49,6 +49,10 @@ DATA_USERS.each do |user|
   puts "Reading distinct beers for user: #{user}"
   CSV.foreach($user_file, converters: :numeric) do |row|
 
+    if row.empty?
+      next;
+    end
+    
     bid = row[0]
     rating = row[12]
     ratings[bid] = rating
@@ -101,6 +105,10 @@ DATA_USERS.each do |user|
 
   CSV.foreach($user_file, converters: :numeric) do |row|
 
+    if row.empty?
+      next;
+    end
+        
     checkin = Checkin.new(row)
 
     if DateTime.parse(checkin.created_at) >= yearStart && DateTime.parse(checkin.created_at) < yearEnd then
@@ -227,7 +235,7 @@ RUN_USERS.each do |user|
               break
             end
 
-            puts "--- #{beer.beer_name} - #{beer.brewery_name} :#{beer.beer_rating_score.round(3)}"
+            #puts "--- #{beer.beer_name} - #{beer.brewery_name} :#{beer.beer_rating_score.round(3)}"
 
             img = "#{beer.beer_label}"
             if img == DEFAULT_PNG then

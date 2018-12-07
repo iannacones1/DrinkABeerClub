@@ -5,7 +5,8 @@ handleBadData ()
     echo 'handleBadData () '$1
 
     cd /home/pi/git/DrinkABeerClub
-    
+
+    rm -rf user_data.fail
     mv user_data user_data.fail
     cp -r user_data.bk user_data
     echo $(date) $1 >> failover.log

@@ -2,7 +2,7 @@
 require '/home/pi/git/DrinkABeerClub/Classes/DistinctBeer.rb'
 
 class Checkin
-    def initialize(inArray)
+    def initialize(inArray = Array.new(16))
         @beer_bid = inArray[0]
         @checkin_id = inArray[1]
         @created_at = inArray[2]
