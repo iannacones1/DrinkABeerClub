@@ -10,6 +10,8 @@ $startTime = Time.now
 
 YEAR = 2018
 STYLE_CONFIG = "data/2018_styles.csv"
+RUN_USER_CONFIG = "data/2018_Users.csv"
+DATA_USER_CONFIG = "data/2018_DataUsers.csv"
 REGION_CONFIG = "data/2018_Regions.csv"
 ORDER_CONFIG = "data/2018_order.csv"
 
@@ -17,11 +19,7 @@ HEADER="HEADER"
 STYLE="STYLE"
 
 REGIONS = RegionMap.new(REGION_CONFIG, ORDER_CONFIG)
-
 STYLES = StyleMap.new(STYLE_CONFIG)
-
-RUN_USER_CONFIG = "data/2018_Users.csv"
-DATA_USER_CONFIG = "data/2018_DataUsers.csv"
 
 RUN_USERS = Array.new()
 RUN_USERS.push("everyone")
@@ -29,6 +27,13 @@ CSV.foreach(RUN_USER_CONFIG) { |user| RUN_USERS.push("#{user[0]}") }
 
 DATA_USERS = Array.new()
 CSV.foreach(DATA_USER_CONFIG) { |user| DATA_USERS.push("#{user[0]}") }
+
+# Jan 1 2015 +5 to GMT
+yearStart = DateTime.new(YEAR.to_i,1,1,5,0,0)
+# Jan 1 2016 +5 to GMT
+yearEnd = DateTime.new(YEAR.to_i + 1,1,1,5,0,0)
+
+tableHash = Hash.new() # USER STYLE REGION
 
 #build a full list of all bid->ratings
 puts "Reading distinct beers for all users (need this for ratings)"
@@ -39,100 +44,108 @@ bids = Hash.new()
 DISTINCT = Hash.new()
 
 DATA_USERS.each do |user|
-  $user_file = "user_data/#{user}_distinct_beers.csv"
-
-  if !File.file?("#{$user_file}") then
-    puts "Missing file: #{$user_file}..."
-    next
-  end
-
-  puts "Reading distinct beers for user: #{user}"
-  CSV.foreach($user_file, converters: :numeric) do |row|
-
-    if row.empty?
-      next;
+    if tableHash[user].nil? then
+        tableHash[user] = Hash.new()
     end
+
+    $user_file = "user_data/#{user}_distinct_beers.csv"
+
+    if !File.file?("#{$user_file}") then
+        puts "Missing file: #{$user_file}..."
+        next
+    end
+
+    puts "Reading distinct beers for user: #{user}"
+    CSV.foreach($user_file, converters: :numeric) do |row|
+
+        if row.empty? then
+            next
+        end
     
-    bid = row[0]
-    rating = row[12]
-    ratings[bid] = rating
+        distinctBeer = Distinct_beer.new(row)
+        bid = distinctBeer.beer_bid
+        rating = distinctBeer.beer_rating_score
+        ratings[bid] = rating
 
-    c = Distinct_beer.new(row)
-    s = STYLES.getStyle(c.beer_style)
+        style = STYLES.getStyle(distinctBeer.beer_style)
 
-    if !s.nil? then
-      if DISTINCT[user].nil? then
-        DISTINCT[user] = Array.new()
-      end
+        if !style.nil? then
+
+            if DISTINCT[user].nil? then
+                DISTINCT[user] = Array.new()
+            end
       
-      DISTINCT[user].push(c.beer_bid)
+            DISTINCT[user].push(distinctBeer.beer_bid)
       
-      if bids[s].nil? then
-        bids[s] = Hash.new()
-      end
+            if bids[style].nil? then
+                bids[style] = Hash.new()
+            end
 
-      r = REGIONS.getRegion(c, s)
+            if tableHash[user][style].nil? then
+                tableHash[user][style] = Hash.new()
+            end
 
-      if bids[s][r].nil? then
-        bids[s][r] = Hash.new()
-      end
+            region = REGIONS.getRegion(distinctBeer, style)
 
-      bids[s][r][c.beer_bid] = c
+            if bids[style][region].nil? then
+                bids[style][region] = Hash.new()
+            end
 
+            bids[style][region][distinctBeer.beer_bid] = distinctBeer
+        
+            if DateTime.parse(distinctBeer.recent_created_at) >= yearStart then
+                if tableHash[user][style][region].nil? ||
+                   tableHash[user][style][region].beer_rating_score <= rating then
+
+                    tableHash[user][style][region] = distinctBeer
+                end
+            end
+        end
     end
-  end
 end
 
-# Jan 1 2015 +5 to GMT
-yearStart = DateTime.new(YEAR.to_i,1,1,5,0,0)
-# Jan 1 2016 +5 to GMT
-yearEnd = DateTime.new(YEAR.to_i + 1,1,1,5,0,0)
-
-tableHash = Hash.new() # USER STYLE REGION
-
-COUNTRYS = Array.new()
 
 # find highest rated for each style
 DATA_USERS.each do |user|
 
-  puts "Reading checkins for user: #{user}"
+    puts "Reading checkins for user: #{user}"
 
-  if tableHash[user].nil? then
-    tableHash[user] = Hash.new()
-  end
-
-  $user_file = "user_data/#{user}_checkins.csv"
-
-  CSV.foreach($user_file, converters: :numeric) do |row|
-
-    if row.empty?
-      next;
+    if tableHash[user].nil? then
+      tableHash[user] = Hash.new()
     end
-        
-    checkin = Checkin.new(row)
 
-    if DateTime.parse(checkin.created_at) >= yearStart && DateTime.parse(checkin.created_at) < yearEnd then
+    $user_file = "user_data/#{user}_checkins.csv"
 
-      style = STYLES.getStyle(checkin.beer_style)
+    CSV.foreach($user_file, converters: :numeric) do |row|
 
-      if !style.nil? then
-
-        if tableHash[user][style].nil? then
-          tableHash[user][style] = Hash.new()
+        if row.empty?
+            next
         end
+      
+        checkin = Checkin.new(row)
 
-        checkin.setRating(ratings[checkin.beer_bid])
+        if DateTime.parse(checkin.created_at) >= yearStart &&
+           DateTime.parse(checkin.created_at) < yearEnd then
 
-        region = REGIONS.getRegion(checkin, style)
+            style = STYLES.getStyle(checkin.beer_style)
 
-        if tableHash[user][style][region].nil? ||
-           tableHash[user][style][region].beer_rating_score <= checkin.beer_rating_score then
-          #puts "#{user} #{style} #{region} #{checkin.beer_name}"
-          tableHash[user][style][region] = checkin
+            if !style.nil? then
+
+                if tableHash[user][style].nil? then
+                    tableHash[user][style] = Hash.new()
+                end
+
+                checkin.setRating(ratings[checkin.beer_bid])
+
+                region = REGIONS.getRegion(checkin, style)
+
+                if tableHash[user][style][region].nil? ||
+                   tableHash[user][style][region].beer_rating_score <= checkin.beer_rating_score then
+                    tableHash[user][style][region] = checkin
+                end
+            end         
         end
-      end         
     end
-  end
 end
 
 output = open("cheatSheet_unlimited.html", "w")

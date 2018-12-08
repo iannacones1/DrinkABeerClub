@@ -32,9 +32,9 @@ USERS = Array.new()
 CSV.foreach(USER_CONFIG) { |user| USERS.push("#{user[0]}") }
 
 # Jan 1 2015 +5 to GMT
-yearStart = DateTime.new(ARGV[0].to_i,1,1,5,0,0)
+yearStart = DateTime.new(YEAR.to_i,1,1,5,0,0)
 # Jan 1 2016 +5 to GMT
-yearEnd = DateTime.new(ARGV[0].to_i + 1,1,1,5,0,0)
+yearEnd = DateTime.new(YEAR.to_i + 1,1,1,5,0,0)
 
 tableHash = Hash.new() # USER STYLE REGION
 
@@ -46,7 +46,7 @@ USERS.each do |user|
     if tableHash[user].nil? then
         tableHash[user] = Hash.new()
     end
-  
+
     $user_file = "user_data/#{user}_distinct_beers.csv"
     puts "Reading distinct beers for user: #{user}"
     CSV.foreach($user_file, converters: :numeric) do |row|
@@ -54,35 +54,31 @@ USERS.each do |user|
         if row.empty? then
             next
         end
-      
+    
         distinctBeer = Distinct_beer.new(row)
         bid = distinctBeer.beer_bid
         rating = distinctBeer.beer_rating_score
         ratings[bid] = rating
 
-        if DateTime.parse(distinctBeer.recent_created_at) >= yearStart then
+        style = STYLES.getStyle(distinctBeer.beer_style)
 
-            style = STYLES.getStyle(distinctBeer.beer_style)
+        if !style.nil? then
 
-            if !style.nil? then
+            if tableHash[user][style].nil? then
+                tableHash[user][style] = Hash.new()
+            end
 
-                if tableHash[user][style].nil? then
-                    tableHash[user][style] = Hash.new()
-                end
+            region = REGIONS.getRegion(distinctBeer, style)
 
-                region = REGIONS.getRegion(distinctBeer, style)
-
+            if DateTime.parse(distinctBeer.recent_created_at) >= yearStart then
                 if tableHash[user][style][region].nil? ||
                    tableHash[user][style][region].beer_rating_score <= rating then
 
-                   tableHash[user][style][region] = distinctBeer
+                    tableHash[user][style][region] = distinctBeer
                 end
-            end         
+            end
         end
-
-        
     end
-
 end
 
 
@@ -118,7 +114,6 @@ USERS.each do |user|
 
                 if tableHash[user][style][region].nil? ||
                    tableHash[user][style][region].beer_rating_score <= checkin.beer_rating_score then
-                    #puts "#{user} #{style} #{region} #{checkin.beer_name}"
                     tableHash[user][style][region] = checkin
                 end
             end         

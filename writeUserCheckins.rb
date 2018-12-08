@@ -14,6 +14,8 @@ end
 # Jan 1 2018 +5 to GMT
 yearStart = DateTime.new(2018,1,1,5,0,0)
 
+limit = 50
+
 oauth = NRB::Untappd::API.new access_token: getToken
 
 $user = ARGV[0]
@@ -50,7 +52,7 @@ end
 
 puts "Last BID: #{$last_bid}"
 
-feed = oauth.user_feed(username: "#{$user}", max_id: $index, limit:50)
+feed = oauth.user_feed(username: "#{$user}", max_id: $index, limit: $limit)
 
 temp = CSV.open($temp_file, 'w')
 
@@ -98,19 +100,16 @@ while !feed.nil? &&
             break
         end
  
-        if $shouldStop
-            break
-        end
     end
 
     if $shouldStop
         break
     end
 
-    if feed.body.response.checkins.items.count < 50
+    if feed.body.response.checkins.items.count < $limit.to_i
         feed.body.response.checkins.items.clear
     else
-      feed = oauth.user_feed(username: "#{$user}", max_id: $index, limit:50)
+      feed = oauth.user_feed(username: "#{$user}", max_id: $index, limit: $limit)
       puts oauth.rate_limit.inspect
     end
 
