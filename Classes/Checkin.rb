@@ -29,7 +29,10 @@ class Checkin
     def getHtmlImg
 
         str = ""
-        title = "(#{@beer_rating_score.round(3)})\n"
+        title = ""
+        if !@beer_rating_score.nil?
+          title += "(#{@beer_rating_score.round(3)})\n"
+        end
         title += "#{@beer_name}\n"
         title += "#{@brewery_name}"
 

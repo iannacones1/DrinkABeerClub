@@ -60,7 +60,8 @@ if [ -n "$UPDATE" ]; then
     #./fileBased_2015.rb
     #./styleBased.rb 2016 data/styles2016.csv data/Users_2016.csv
     #./regionStyleBased.rb 2017 data/2017_styles.csv data/Users_2016.csv data/Regions.csv
-    ./2018_DaBC.rb 2018 data/2018_styles.csv data/2018_Users.csv data/2018_Regions.csv
+    #./2018_DaBC.rb 2018 data/2018_styles.csv data/2018_Users.csv data/2018_Regions.csv
+    ./2019_DaBC.rb 2019 data/2019.csv data/2019_Users.csv
 
     if [[ $? -eq 0 ]]; then
         mv table.html /var/www/html/table.html
@@ -71,13 +72,13 @@ if [ -n "$UPDATE" ]; then
         handleBadData "table"
     fi
 
-    ./BeersOfFame_AllUserTable.rb
-    if [[ $? -eq 0 ]]; then
-        mv "BeersOfFame.html" /var/www/html/
-    else
-        rm "BeersOfFame.html"
-        handleBadData "table"
-    fi    
+#    ./BeersOfFame_AllUserTable.rb
+#    if [[ $? -eq 0 ]]; then
+#        mv "BeersOfFame.html" /var/www/html/
+#    else
+#        rm "BeersOfFame.html"
+#        handleBadData "table"
+#    fi    
 
 else
     echo 'No new user data; nothing to do'

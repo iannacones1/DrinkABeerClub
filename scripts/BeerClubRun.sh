@@ -19,7 +19,7 @@ cd /home/pi/git/DrinkABeerClub/scripts
 
 ./HtmlWriter.sh | tee logs/HtmlWriter.log
 
-./CheatSheet.bash | tee logs/CheatSheet.log
+#./CheatSheet.bash | tee logs/CheatSheet.log
 
 echo "UNLOCK $LOCK_FILE"
 rm $LOCK_FILE

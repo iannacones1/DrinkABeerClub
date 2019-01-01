@@ -6,7 +6,7 @@ hour=${hour#0}
 
 cd /home/pi/git/DrinkABeerClub
 
-USERS="data/2018_DataUsers.csv"
+USERS="data/2019_DataUsers.csv"
 
 USER_COUNT=$(cat $USERS | wc -l)
 
