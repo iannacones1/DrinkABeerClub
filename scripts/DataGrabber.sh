@@ -1,8 +1,7 @@
 #!/bin/bash
 
-minute=$(date +%M)
-hour=$(date +%H)
-hour=${hour#0}
+minute=$(date +%-M)
+hour=$(date +%-H)
 
 cd /home/pi/git/DrinkABeerClub
 

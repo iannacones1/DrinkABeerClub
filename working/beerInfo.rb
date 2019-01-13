@@ -42,7 +42,7 @@ if beerInfo.respond_to? :vintages
 
 puts "====== VINTAGES AND VARIANTS ======"
 puts "           Count: #{beerInfo.vintages.count}"
-
+puts "           Count: #{beerInfo.vintages.items.size}"
 i = 1
 beerInfo.vintages.items.each do |item|
 str = "?"
