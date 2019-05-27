@@ -11,7 +11,7 @@ if ARGV[0].nil?
     exit 1
 end
 
-oauth = NRB::Untappd::API.new access_token: getToken
+oauth = NRB::Untappd::API.new client_id: getClientId, client_secret: getClientSecret
 
 $user = ARGV[0]
 

@@ -7,7 +7,7 @@ DEFAULT_PNG = "https://d1c8v1qci5en44.cloudfront.net/site/assets/images/temp/bad
 
 USER_CONFIG = "data/TestUsers.csv"
 
-oauth = NRB::Untappd::API.new access_token: getToken
+oauth = NRB::Untappd::API.new client_id: getClientId, client_secret: getClientSecret
 
 CSV.foreach(USER_CONFIG) do |user|
 

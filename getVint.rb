@@ -9,7 +9,7 @@ if ARGV.empty?
     exit
 end
 
-oauth = NRB::Untappd::API.new access_token: getToken
+oauth = NRB::Untappd::API.new client_id: getClientId, client_secret: getClientSecret
 
 beerInfo = oauth.beer_info(bid: ARGV[0], compact: true)
     

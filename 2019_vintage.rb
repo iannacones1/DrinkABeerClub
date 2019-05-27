@@ -117,7 +117,7 @@ USERS.each do |user|
     end
 end
 
-oauth = NRB::Untappd::API.new access_token: getToken
+oauth = NRB::Untappd::API.new client_id: getClientId, client_secret: getClientSecret
 
 BEERS.each do |bid, distinctBeer|
 

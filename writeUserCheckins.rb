@@ -16,7 +16,7 @@ yearStart = DateTime.new(2018,1,1,5,0,0)
 
 limit = 50
 
-oauth = NRB::Untappd::API.new access_token: getToken
+oauth = NRB::Untappd::API.new client_id: getClientId, client_secret: getClientSecret
 
 $user = ARGV[0]
 

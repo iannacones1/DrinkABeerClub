@@ -21,7 +21,7 @@ def getSetIndex(inSet)
   return -1
 end
 
-oauth = NRB::Untappd::API.new access_token: getToken
+oauth = NRB::Untappd::API.new client_id: getClientId, client_secret: getClientSecret
 
 output = open("table.html", "w")
 
