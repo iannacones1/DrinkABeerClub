@@ -142,6 +142,7 @@ HtmlElement.new("th", totalRow, "Count:")
 
 $user_totals = Hash.new(0) 
 $user_score = Hash.new(0)
+$user_last = Hash.new(0)
 USERS.each do |user|
     puts "Counting totals for user: #{user}"
     CSV.foreach(BID_CONFIG, converters: :numeric) do |row|
@@ -152,6 +153,9 @@ USERS.each do |user|
 
           if $user_totals[user] <= LIMIT
               $user_score[user] += 251 - row[0]
+          end
+          if $user_totals[user] == LIMIT
+              $user_last[user] = row[0]
           end
         end
     end
@@ -182,11 +186,31 @@ USERS.each do |user|
   aAvg = HtmlElement.new("th", avgRow, "(#{251 - avg})")
 end
 
+lastRow = HtmlElement.new("tr", table)
+
+HtmlElement.new("th", lastRow, "Number #{LIMIT} Rank:")
+
+USERS.each do |user|
+  usrLastTxt = ""
+
+  if $user_last.has_key?(user) then
+    usrLastTxt = $user_last[user]
+  end
+
+  aLast = HtmlElement.new("th", lastRow, "#{usrLastTxt}")
+
+  if $user_last.has_key?(user)
+      #aLast.addAttribute("bgcolor", "#00FF00")
+  end
+
+end
+
+index = 1
 CSV.foreach(BID_CONFIG, converters: :numeric) do |row|
     bid = row[1]
   
     aRow = HtmlElement.new("tr", table)
-    aHeader = HtmlElement.new("th", aRow, "#{row[0]}<br/>#{row[2]}<br/>#{row[3]}")
+    aHeader = HtmlElement.new("th", aRow, "#{row[0]}<br/><img src=\"#{row[5]}\"><br/>#{row[2]}<br/>#{row[3]}")
 
     USERS.each do |user|
         str = ""
@@ -195,7 +219,12 @@ CSV.foreach(BID_CONFIG, converters: :numeric) do |row|
         end
         aData = HtmlElement.new("td", aRow, "#{str}")
         aData.addAttribute("width", 100)
+
+        if $user_last.has_key?(user) && index == $user_last[user]
+            #aData.addAttribute("bgcolor", "#00FF00")
+        end
     end
+    index += 1
 end
 
 aFile = open("table.html", "w")
