@@ -11,6 +11,8 @@ $user = ARGV[0]
 
 $user_file = "user_data/#{$user}_distinct_beers.csv"
 
+puts "opening #{$user_file}"
+
 userRating = Hash.new(0)
 breweryCount = Hash.new(0)
 breweryInfo = Hash.new
@@ -20,8 +22,9 @@ CSV.foreach($user_file, converters: :numeric) do |row|
     if row.empty?
       next;
     end   
-    
+
     c = Distinct_beer.new(row)
+#puts "#{c.inspect}"    
 
     userRating[c.brewery_name] += (c.rating_score == 0 ? c.beer_rating_score : c.rating_score)
     breweryInfo[c.brewery_name] = c
