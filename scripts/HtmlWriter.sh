@@ -61,7 +61,8 @@ if [ -n "$UPDATE" ]; then
     #./styleBased.rb 2016 data/styles2016.csv data/Users_2016.csv
     #./regionStyleBased.rb 2017 data/2017_styles.csv data/Users_2016.csv data/Regions.csv
     #./2018_DaBC.rb 2018 data/2018_styles.csv data/2018_Users.csv data/2018_Regions.csv
-    ./2019_DaBC.rb 2019 data/2019.csv data/2019_Users.csv
+    #./2019_DaBC.rb 2019 data/2019.csv data/2019_Users.csv
+    ./2019_DaBC.rb 2020 data/2020.csv data/2020_Users.csv
 
     if [[ $? -eq 0 ]]; then
         mv table.html /var/www/html/table.html

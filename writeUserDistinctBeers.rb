@@ -4,7 +4,7 @@ require 'csv'
 require '/home/pi/git/DrinkABeerClub/getUserDistinctBeers.rb'
 require '/home/pi/git/DrinkABeerClub/Classes/DistinctBeer.rb'
 
-USER_CONFIG = "data/2019_Users.csv"
+USER_CONFIG = "data/2020_Users.csv"
 
 if ARGV[0].nil?
     puts "Please input username"

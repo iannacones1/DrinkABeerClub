@@ -5,7 +5,7 @@ hour=$(date +%-H)
 
 cd /home/pi/git/DrinkABeerClub
 
-USERS="data/2019_DataUsers.csv"
+USERS="data/2020_DataUsers.csv"
 
 USER_COUNT=$(cat $USERS | wc -l)
 
