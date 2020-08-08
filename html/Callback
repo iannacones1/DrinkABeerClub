@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+
+    <script type="text/javascript">
+
+      function getUrlParameter(name)
+      {
+          name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+          var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+          var results = regex.exec(location.search);
+          return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+      };
+
+      var HttpClient = function()
+      {
+          this.get = function(aUrl, aCallback)
+          {
+              var anHttpRequest = new XMLHttpRequest();
+              anHttpRequest.onreadystatechange = function()
+              { 
+                  if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                  {
+                      aCallback(anHttpRequest.responseText);
+                  }
+              }
+
+              anHttpRequest.open( "GET", aUrl, true );            
+              anHttpRequest.send( null );
+          }
+      }
+
+      var code = getUrlParameter('code');
+
+      console.log(code);
+
+      //id
+                    // 276C318EEC6130BEE8028B70217C253A1AD88DB7      
+      var client_id = '276C318EEC6130BEE8028B70217C253A1AD88DB7';
+                        // 5D40ED388EDA3BE7CAF6BE4C9AB6CA09392FFF45
+      var client_secret = '5D40ED388EDA3BE7CAF6BE4C9AB6CA09392FFF45';
+
+
+                      //https://untappd.com/oauth/authorize/?client_id=CLIENTID&client_secret=CLIENTSECRET&response_type=code&redirect_url=REDIRECT_URL&code=CODE
+
+      var url_string = 'https://untappd.com/oauth/authorize/?client_id=' + client_id + '&client_secret=' + client_secret + '&response_type=code&redirect_url=http://drinkabeerclub.com/Callback&code=' + code;
+
+      console.log(url_string);
+
+      var client = new HttpClient();
+      client.get(url_string, function(response) { console.log(response); });
+
+      // window.location.replace(url_string);
+
+      //var new_token = GET(url_string);
+      //console.log(new_token)
+
+
+    </script>
+
+  </head>
+
+  <body>
+  </body>
+
+</html>

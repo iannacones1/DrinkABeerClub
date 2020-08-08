@@ -3,7 +3,7 @@
 LOCK_FILE="/home/pi/.DaBCDataLock"
 
 if [ -e $LOCK_FILE ]; then
-
+    #TODO: Lock file could be "old" ignore if older then x time
     echo "$LOCK_FILE LOCKED; exit"
     exit 1
 fi

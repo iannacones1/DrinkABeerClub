@@ -1,67 +1,47 @@
 #!/usr/bin/ruby
-require 'drink-socially'
 require 'csv'
-require '/home/pi/git/DrinkABeerClub/getUserDistinctBeers.rb'
-require '/home/pi/git/DrinkABeerClub/Classes/DistinctBeer.rb'
-
-USER_CONFIG = "data/2020_Users.csv"
+require_relative 'getUntappdData.rb'
+require_relative 'Classes/DistinctBeer.rb'
 
 if ARGV[0].nil?
     puts "Please input username"
     exit 1
 end
 
-$user = ARGV[0]
+$user       = ARGV[0]
+$temp_file  = "#{$user}_distinct_beers.csv"
+$user_file  = "user_data/#{$user}_distinct_beers.csv"
+$shouldStop = false
+$index      = 0
 
 puts "Loading User: #{$user}"
-
-$temp_file = "#{$user}_distinct_beers.csv"
-$user_file = "user_data/#{$user}_distinct_beers.csv"
-
 puts "Updating File: #{$user_file}"
 
-$shouldStop = false
-
-$index = 0
-
-`touch #{$temp_file}`
-`rm #{$temp_file}`
-
+`rm -f #{$temp_file}`
 `touch #{$user_file}`
 
 $last_bid
 
+# Find the latest BID logged in $user_file
 CSV.foreach($user_file, converters: :numeric) do |row|
-
     c = Distinct_beer.new(row)
-
     $last_bid = c.beer_bid
-
     break
 end
 
 puts "Last BID: #{$last_bid}"
 
-feed = getUserDistinctBeers("#{$user}", $index)
-
 temp = CSV.open($temp_file, 'w')
 
 $additions = 0
 
-#puts "#{feed.inspect}"
+feed = getUserDistinctBeers("#{$user}", $index)
 
-while !feed.nil? &&
-      !feed["response"].nil? &&
-      !feed["response"].first.nil? &&
-      !feed["response"]["beers"].nil? &&
-      !feed["response"]["beers"]["count"].nil? &&
-       feed["response"]["beers"]["count"] > 0 &&
-      !feed["response"]["beers"]["items"].nil? &&
-       feed["response"]["beers"]["items"].count > 0 do
+while feedContainsUserDistinctData(feed) do
 
     $index = $index + feed["response"]["beers"]["items"].count
 
-puts "#{$index}"
+    puts "#{$index}"
 
     feed["response"]["beers"]["items"].each do |c|
 
@@ -90,13 +70,11 @@ puts "#{$index}"
                           "#{c['brewery']['location']['lat']}",
                           "#{c['brewery']['location']['lng']}"])
         else
+            # if this BID matches last_bid
             $shouldStop = true
             break
         end
  
-        if $shouldStop
-            break
-        end
     end
 
     if $shouldStop
@@ -104,14 +82,12 @@ puts "#{$index}"
     end
 
     if feed["response"]["beers"]["items"].count < 50
+        # If the feed has less then 50 entries then we've reached the end
+        # (clearing it will cause the do while loop to end)
         feed["response"]["beers"]["items"].clear
     else
        puts "added: #{feed['response']['beers']['items'].count}"
-
-#      feed = oauth.user_distinct_beers(username: "#{$user}", offset: $index, limit: $limit)
-        feed = getUserDistinctBeers("#{$user}", $index)
-
- #     puts oauth.rate_limit.inspect
+       feed = getUserDistinctBeers("#{$user}", $index)
     end
 
 end
@@ -124,5 +100,4 @@ if $additions == 0
     `rm #{$temp_file}`
 end
 
-#puts oauth.rate_limit.inspect
 puts "Additions: #{$additions}"
