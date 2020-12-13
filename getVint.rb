@@ -1,23 +1,30 @@
 #!/usr/bin/ruby
-require 'drink-socially'
 require 'date'
 require 'csv'
-require '/home/pi/git/DrinkABeerClub/tokens/untappdConfigure.rb'
+require_relative 'getUntappdData.rb'
 
 if ARGV.empty?
     puts "Pass in BID"
     exit
 end
 
-oauth = NRB::Untappd::API.new client_id: getClientId, client_secret: getClientSecret
+bid = ARGV[0]
 
-beerInfo = oauth.beer_info(bid: ARGV[0], compact: true)
+beerInfo = getBeerInfo(bid)
     
-if beerInfo.respond_to? :vintages
-    beerInfo.vintages.items.each do |item|
+if feedHasResponse(beerInfo) &&
+   !beerInfo["response"]["beer"].nil? &&
+   !beerInfo["response"]["beer"]["vintages"].nil? &&
+   !beerInfo["response"]["beer"]["vintages"]["count"].nil? &&
+    beerInfo["response"]["beer"]["vintages"]["count"].to_i > 0 &&
+   !beerInfo["response"]["beer"]["vintages"]["items"].nil? &&
+    beerInfo["response"]["beer"]["vintages"]["items"].count > 0 &&
 
-        if (item.beer.is_vintage == 1)
-            puts "#{item.beer.bid},"
+    beerInfo["response"]["beer"]["vintages"]["items"].each do |item|
+
+        if (item["beer"]["is_vintage"] == 1)
+            puts "#{item['beer']['bid']},"
         end
     end
+
 end

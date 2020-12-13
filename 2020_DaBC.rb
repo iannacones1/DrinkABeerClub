@@ -80,30 +80,6 @@ USERS.each do |user|
     end
 end
 
-
-USERS.each do |user|
-    $user_file = "user_data/#{user}_checkins.csv"
-    puts "Reading checkins for user: #{user}"
-    CSV.foreach($user_file, converters: :numeric) do |row|
-
-        if row.empty?
-            next
-        end
-      
-        checkin = Checkin.new(row)
-        bid = checkin.beer_bid
-
-        if VINTAGE.has_key?(bid)
-            bid = VINTAGE[bid]
-        end     
-
-        if DateTime.parse(checkin.created_at) >= yearStart &&
-           DateTime.parse(checkin.created_at) < yearEnd then
-            user_bid_hash[user][bid] = checkin
-        end
-    end
-end
-
 html = HtmlElement.new("html")
   head = HtmlElement.new("head", html)
     noRobots = HtmlElement.new("meta", head)
