@@ -87,6 +87,7 @@ while feedContainsActivity(feed, yearStart)
         # If the feed has less then 50 entries then we've reached the end
         # (clearing it will cause the do while loop to end)
         feed["response"]["checkins"]["items"].clear
+        break
     else
         puts "added: #{feed['response']['checkins']['items'].count}"
         feed = getUserActivityFeed("#{$user}", $index)

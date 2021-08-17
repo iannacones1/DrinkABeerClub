@@ -17,11 +17,11 @@ cd /home/pi/git/DrinkABeerClub/scripts
 
 ./DataGrabber.sh | tee logs/DataGrapper.log
 
-./Vintage.sh | tee logs/Vintage.log
+#./Vintage.sh | tee logs/Vintage.log
 
 ./HtmlWriter.sh | tee logs/HtmlWriter.log
 
-#./CheatSheet.bash | tee logs/CheatSheet.log
+./CheatSheet.bash | tee logs/CheatSheet.log
 
 echo "UNLOCK $LOCK_FILE"
 rm $LOCK_FILE

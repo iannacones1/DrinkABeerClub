@@ -23,6 +23,7 @@ USER_CONFIG = "#{ARGV[2]}"
 
 CITY_LOOKUP = Hash.new()
 COUNTY_HASH = Hash.new()
+STATE_ARRAY = ["DE", "MD", "NJ", "NY", "PA"]
 
 county_brewery_hash = Hash.new()
 
@@ -88,6 +89,8 @@ USERS.each do |user|
             county_full = CITY_LOOKUP[city_full]
 
             county_brewery_hash[county_full].add(distinctBeer.brewery_name)
+        elsif STATE_ARRAY.include?("#{distinctBeer.brewery_state.strip}")
+            puts "Issue finding #{city_full}"
         end
     end
 end

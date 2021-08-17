@@ -41,7 +41,7 @@ while feedContainsUserDistinctData(feed) do
 
     $index = $index + feed["response"]["beers"]["items"].count
 
-    puts "#{$index}"
+    puts "index=#{$index}"
 
     feed["response"]["beers"]["items"].each do |c|
 
@@ -71,6 +71,7 @@ while feedContainsUserDistinctData(feed) do
                           "#{c['brewery']['location']['lng']}"])
         else
             # if this BID matches last_bid
+            puts "c[beer][bid] == $last_bid; shouldStop = true; Break"
             $shouldStop = true
             break
         end
@@ -78,13 +79,14 @@ while feedContainsUserDistinctData(feed) do
     end
 
     if $shouldStop
+        puts "shouldStop = true; Break"
         break
     end
 
     if feed["response"]["beers"]["items"].count < 50
+	puts "if feed[response][beers][items].count < 50; break"
         # If the feed has less then 50 entries then we've reached the end
-        # (clearing it will cause the do while loop to end)
-        feed["response"]["beers"]["items"].clear
+        break
     else
        puts "added: #{feed['response']['beers']['items'].count}"
        feed = getUserDistinctBeers("#{$user}", $index)

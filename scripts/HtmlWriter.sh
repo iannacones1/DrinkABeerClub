@@ -62,7 +62,8 @@ if [ -n "$UPDATE" ]; then
     #./regionStyleBased.rb 2017 data/2017_styles.csv data/Users_2016.csv data/Regions.csv
     #./2018_DaBC.rb 2018 data/2018_styles.csv data/2018_Users.csv data/2018_Regions.csv
     #./2019_DaBC.rb 2019 data/2019.csv data/2019_Users.csv
-    ./2019_DaBC.rb 2020 data/2020.csv data/2020_Users.csv
+    #./2019_DaBC.rb 2020 data/2020.csv data/2020_Users.csv
+    ./2021_DaBC.rb 2021 data/DE-MD-NJ-NY-PA_county_list.csv data/DE-MD-NJ-NY-PA_city_to_county.csv data/2021_Users.csv
 
     if [[ $? -eq 0 ]]; then
         mv table.html /var/www/html/table.html

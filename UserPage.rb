@@ -146,7 +146,7 @@ $lastRating = 0
 
 userRating.sort_by { |brewery, rating| rating }.reverse.each do |brewery, rating|
 
-    if $i >= 20 && $lastRating > rating
+    if $i >= 32 && $lastRating > rating
         break
     end
 
@@ -156,7 +156,7 @@ userRating.sort_by { |brewery, rating| rating }.reverse.each do |brewery, rating
 
     $i += 1
     $lastRating = rating
-    if $i % 5 == 0
+    if $i % 8 == 0
         output.indent()
         output.write("<br>\n")
     end

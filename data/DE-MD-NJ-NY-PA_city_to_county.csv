@@ -1138,6 +1138,7 @@ NY,Queens County,Hollis
 NY,Queens County,Bellerose
 NY,Queens County,Queens Village
 NY,Queens County,Queens Vlg
+NY,Queens County,Queens
 NY,Queens County,Bellrs Manor
 NY,Queens County,Bellerose Manor
 NY,Queens County,John F Kennedy Airport
@@ -3516,6 +3517,9 @@ PA,Indiana County,Kent
 PA,Clearfield County,La Jose
 PA,Indiana County,Lucernemines
 PA,Indiana County,Mc Intyre
+PA,Elk County,Saint Marys
+PA,Elk County,St. Marys
+PA,Elk County,St Marys
 PA,Clearfield County,Mahaffey
 PA,Clearfield County,Mcgees Mills
 PA,Indiana County,Marchand
@@ -3572,7 +3576,6 @@ PA,Elk County,Ridgway
 PA,Elk County,Portland Mls
 PA,Elk County,Portland Mills
 PA,Clearfield County,Rockton
-PA,Elk County,Saint Marys
 PA,Jefferson County,Sigel
 PA,Jefferson County,Hallton
 PA,Cameron County,Sinnamahoning
@@ -4339,6 +4342,7 @@ PA,Lancaster County,Bainbridge
 PA,Lancaster County,Bart
 PA,Lancaster County,Bausman
 PA,Lancaster County,Bird In Hand
+PA,Lancaster County,Bird-in-Hand
 PA,Lancaster County,Blue Ball
 PA,Lancaster County,Bowmansville
 PA,Lancaster County,Brownstown
@@ -4780,6 +4784,7 @@ PA,Monroe County,Saylorsburg
 PA,Monroe County,Sciota
 PA,Monroe County,Scotrun
 PA,Monroe County,Shawnee On Delaware
+PA,Monroe County,Shawnee on Delaware
 PA,Monroe County,Shawnee On De
 PA,Monroe County,Shawnee
 PA,Monroe County,Skytop
@@ -4967,6 +4972,7 @@ PA,Wyoming County,Mehoopany Twp
 PA,Luzerne County,Wapwallopen
 PA,Luzerne County,White Haven
 PA,Luzerne County,Wilkes Barre
+PA,Luzerne County,Wilkes-Barre
 PA,Luzerne County,Wlks Barr Twp
 PA,Luzerne County,Wilkes Barre Township
 PA,Luzerne County,Plains Twp
@@ -5162,6 +5168,7 @@ PA,Delaware County,Clifton Hts
 PA,Delaware County,Aldan
 PA,Philadelphia County,Philadelphia
 PA,Bucks County,Bensalem
+PA,Bucks County,Bensalem Township
 PA,Bucks County,Eddington
 PA,Bucks County,Cornwells Hts
 PA,Bucks County,Cornwells Heights
@@ -5363,6 +5370,7 @@ PA,Montgomery County,Eagleville
 PA,Montgomery County,Audubon
 PA,Montgomery County,Bridgeport
 PA,Montgomery County,King Of Prussia
+PA,Montgomery County,King of Prussia
 PA,Montgomery County,Kng Of Prussa
 PA,Montgomery County,Fairview Village
 PA,Montgomery County,Fairview Vlg
@@ -6086,6 +6094,7 @@ MD,Kent County,Rock Hall
 MD,Talbot County,Royal Oak
 MD,Talbot County,Saint Michaels
 MD,Talbot County,St Michaels
+MD,Talbot County,St. Michaels
 MD,Dorchester County,Secretary
 MD,Talbot County,Sherwood
 MD,Queen Anne's County,Stevensville

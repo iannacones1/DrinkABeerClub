@@ -70,6 +70,8 @@ yearEnd = DateTime.new(YEAR.to_i + 1,1,1,5,0,0)
 
 user_county_hash = Hash.new()
 
+# TODO: beacuse the checkin limit is at 350 you got to add distinct
+
 USERS.each do |user|
     if user_county_hash[user].nil? then
         user_county_hash[user] = Hash.new()
@@ -98,7 +100,7 @@ USERS.each do |user|
 
             if user_county_hash[user][county_full].nil? then
                 user_county_hash[user][county_full] = checkin
-            elsif user_county_hash[user][county_full].rating_score >= checkin.rating_score
+            elsif user_county_hash[user][county_full].rating_score <= checkin.rating_score
                 user_county_hash[user][county_full] = checkin
             end
 
